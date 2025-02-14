@@ -10,9 +10,9 @@ This document outlines our **high-level goals** and **major milestones**. The ro
 
 - [x] **Fungible Token Creation** (core attributes only: name, symbol, decimals, supply)
 - [ ] **Non-Fungible Token Creation** (core attributes only: name, symbol, decimals, supply)
-- [ ] **Mint Token**
-- [ ] **Basic Token Transfer** (simple transfer from client to another user)
-- [ ] **Fetch Token Info** (optional: retrieving metadata)
+- [x] **Mint Token**
+- [x] **Basic Token Transfer** (simple transfer from client to another user)
+- [x] **Fetch Token Info** (optional: retrieving metadata)
 
 **Milestone**: `v0.1`
 
@@ -22,8 +22,8 @@ This document outlines our **high-level goals** and **major milestones**. The ro
 
 **Goal**: Enable simple messaging/consensus features.
 
-- [ ] **Create Topic** (basic setup)
-- [ ] **Publish Messages** to a topic
+- [x] **Create Topic** (basic setup)
+- [x] **Publish Messages** to a topic
 
 **Milestone**: `v0.2`
 

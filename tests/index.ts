@@ -1,5 +1,5 @@
 import HederaAgentKit from "../src/agent";
-import { createHederaTools } from "../src/langchain";
+import { createHederaTools } from "../src";
 import { ChatOpenAI } from "@langchain/openai";
 import { MemorySaver } from "@langchain/langgraph";
 import { createReactAgent } from "@langchain/langgraph/prebuilt";

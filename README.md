@@ -10,8 +10,45 @@ Welcome to the **Hedera Agent Kit**! This project aims to provide a LangChain-co
 
 ## Current Features
 
-1. **Native Hedera Token Service**: Create fungible tokens with minimal parameters.
-2. **Upcoming (Roadmap)**: Create NFTs, transfer tokens, create topics and post messages, simple swapping on DEXs, and more.
+1. **Native Hedera Token Service (HTS)**:
+    - Create fungible tokens with minimal parameters (name, symbol, decimals, supply, etc.).
+    - Mint additional tokens to existing token accounts.
+
+2. **Token Operations**:
+    - **Create Fungible Tokens (FT)**: Easily create and configure new fungible tokens.
+    - **Transfer Tokens**: Transfer tokens between accounts.
+    - **Associate / Dissociate Tokens**: Associate a token to an account or dissociate it as needed.
+    - **Reject Tokens**: Reject a token from an account.
+
+3. **HBAR Transactions**:
+    - Transfer HBAR between accounts.
+
+4. **Airdrop Management**:
+    - Airdrop tokens to multiple recipients.
+    - Claim a pending airdrop.
+
+5. **Token Balance Queries**:
+    - Get HBAR balances of an account.
+    - Get HTS token balances for a specific token ID.
+    - Retrieve all token balances for an account.
+    - Get token holders for a specific token.
+
+6. **Topic Management (HCS)**:
+    - **Create Topics**: Create new topics for Hedera Consensus Service (HCS).
+    - **Delete Topics**: Delete an existing topic.
+    - **Submit Topic Messages**: Send messages to a specific topic.
+    - **Get Topic Info**: Retrieve information about a specific topic.
+    - **Get Topic Messages**: Fetch messages from a specific topic.
+
+7. **Upcoming Features** (Roadmap):
+    - Create NFTs.
+    - Simple token swapping on DEXs.
+
+### Note
+The methods in the HederaAgentKit class are fully implemented and functional for interacting with the Hedera network (e.g., creating tokens, transferring assets, managing airdrops). However, Langchain tools for most of these methods and operations are not implemented by default.
+
+### Details
+For further details check [HederaAgentKit Readme](./src/agent/README.md).
 
 ## Getting Started
 

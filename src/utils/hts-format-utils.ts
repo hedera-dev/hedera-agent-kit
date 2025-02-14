@@ -1,5 +1,5 @@
 import { HederaNetworkType } from "../types";
-import { get_hts_token_details } from "../tools/hts/queries";
+import { get_hts_token_details } from "../tools";
 import BigNumber from "bignumber.js";
 
 export const toDisplayUnit = async (

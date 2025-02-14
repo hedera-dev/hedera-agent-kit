@@ -1,4 +1,4 @@
-import {HederaNetworkType, HtsTokenDetails} from "../../../types";
+import { HederaNetworkType, HtsTokenDetails } from "../../../types";
 
 export const get_hts_token_details = async (
     tokenId: string,

@@ -1,4 +1,4 @@
-import {Airdrop, HederaNetworkType, PendingAirdropsApiResponse} from "../../../types";
+import { Airdrop, HederaNetworkType, PendingAirdropsApiResponse } from "../../../types";
 
 export const get_pending_airdrops = async (
     networkType: HederaNetworkType,

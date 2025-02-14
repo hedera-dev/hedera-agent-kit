@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import {TokenId} from "@hashgraph/sdk";
+import { TokenId } from "@hashgraph/sdk";
 
 export type HederaNetworkType = "mainnet" | "testnet" | "previewnet";
 
@@ -151,7 +151,17 @@ export type CreateTopicResult = {
     topicId: string,
 }
 
+export type DeleteTopicResult = {
+    status: string,
+    txHash: string,
+}
+
 export type MintTokenResult = {
+    status: string,
+    txHash: string,
+}
+
+export type AssetAllowanceResult = {
     status: string,
     txHash: string,
 }
@@ -184,4 +194,23 @@ export type TopicInfoApiResponse = {
     timestamp?: TimestampRange;
     topic_id?: string | null; // Format: shard.realm.num (e.g., "0.0.2")
 };
+
+export type HCSMessage = {
+    chunk_info: null | any;
+    consensus_timestamp: string;
+    message: string;
+    payer_account_id: string;
+    running_hash: string;
+    running_hash_version: number;
+    sequence_number: number;
+    topic_id: string;
+};
+
+export type HCSMessageApiResponse = {
+    messages: HCSMessage[];
+    links: {
+        next: string | null;
+    };
+};
+
 
