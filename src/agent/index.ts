@@ -838,6 +838,13 @@ export class HederaAgentKit {
 
         return new NonCustodialAssetAllowanceResult(txBytes);
     }
+
+    public getOperator(): { id: string, key?: string } {
+        return {
+            id: this.client.operatorAccountId?.toString()!,
+            key: this.privateKey!
+        }
+    }
 }
 
 export default HederaAgentKit;

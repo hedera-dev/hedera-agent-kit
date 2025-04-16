@@ -1,6 +1,6 @@
 {
   "name": "hedera-agent-kit",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -23,6 +23,7 @@
     "@langchain/core": "^0.3.26",
     "@langchain/langgraph": "^0.2.34",
     "@langchain/openai": "^0.3.16",
+    "@hashgraphonline/standards-agent-kit": "^0.0.18",
     "bignumber.js": "^9.1.2",
     "dotenv": "^16.4.7"
   },
