@@ -2,6 +2,7 @@ import { Tool, ToolRunnableConfig } from "@langchain/core/tools";
 import HederaAgentKit from "../../../agent";
 import { TokenId } from "@hashgraph/sdk";
 import { CallbackManagerForToolRun } from "@langchain/core/callbacks/manager";
+import { ExecutorAccountDetails } from "../../../types";
 
 export class HederaRejectTokenTool extends Tool {
     name = 'hedera_reject_token';
@@ -23,12 +24,14 @@ Example usage:
     protected override async _call(input: any, _runManager?: CallbackManagerForToolRun, config?: ToolRunnableConfig): Promise<string> {
         try {
             const isCustodial = config?.configurable?.isCustodial === true;
+            const executorAccountDetails: ExecutorAccountDetails = config?.configurable?.executorAccountDetails;
+
             console.log(`hedera_reject_token tool has been called (${isCustodial ? 'custodial' : 'non-custodial'})`);
 
             const parsedInput = JSON.parse(input);
             const tokenId = TokenId.fromString(parsedInput.tokenId);
             return this.hederaKit
-                .rejectToken(tokenId, isCustodial)
+                .rejectToken(tokenId, isCustodial, executorAccountDetails)
                 .then(response => response.getStringifiedResponse());
 
         } catch (error: any) {

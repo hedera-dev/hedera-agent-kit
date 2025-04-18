@@ -1,6 +1,7 @@
 import { Tool, ToolRunnableConfig } from "@langchain/core/tools";
 import HederaAgentKit from "../../../agent";
 import { CallbackManagerForToolRun } from "@langchain/core/callbacks/manager";
+import { ExecutorAccountDetails } from "../../../types";
 
 // FIXME: works well in isolation but normally usually createFT is called instead of createNFT
 export class HederaCreateNonFungibleTokenTool extends Tool {
@@ -25,6 +26,8 @@ Inputs (input is a JSON string):
     protected override async _call(input: any, _runManager?: CallbackManagerForToolRun, config?: ToolRunnableConfig): Promise<string> {
         try {
             const isCustodial = config?.configurable?.isCustodial === true;
+            const executorAccountDetails: ExecutorAccountDetails = config?.configurable?.executorAccountDetails;
+
             console.log(`hedera_create_non_fungible_token tool has been called (${isCustodial ? 'custodial' : 'non-custodial'})`);
 
             const parsedInput = JSON.parse(input);
@@ -39,7 +42,7 @@ Inputs (input is a JSON string):
             };
 
             return await this.hederaKit
-                .createNFT(options, isCustodial)
+                .createNFT(options, isCustodial, executorAccountDetails)
                 .then(response => response.getStringifiedResponse());
         } catch (error: any) {
             return JSON.stringify({

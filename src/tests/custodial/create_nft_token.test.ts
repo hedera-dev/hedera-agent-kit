@@ -1,9 +1,9 @@
 import { describe, expect, it, beforeEach, beforeAll } from "vitest";
-import { NetworkType } from "./types";
-import { HederaMirrorNodeClient } from "./utils/hederaMirrorNodeClient";
+import { NetworkType } from "../types";
+import { HederaMirrorNodeClient } from "../utils/hederaMirrorNodeClient";
 import * as dotenv from "dotenv";
-import { LangchainAgent } from "./utils/langchainAgent";
-import { NetworkClientWrapper } from "./utils/testnetClient";
+import { LangchainAgent } from "../utils/langchainAgent";
+import { NetworkClientWrapper } from "../utils/testnetClient";
 import {TokenType} from "@hashgraph/sdk";
 
 const IS_CUSTODIAL = true;
@@ -40,7 +40,6 @@ describe("create_nft_token", () => {
         wrapper = new NetworkClientWrapper(
             process.env.HEDERA_ACCOUNT_ID!,
             process.env.HEDERA_PRIVATE_KEY!,
-            process.env.HEDERA_PUBLIC_KEY!,
             process.env.HEDERA_KEY_TYPE!,
             "testnet"
         );

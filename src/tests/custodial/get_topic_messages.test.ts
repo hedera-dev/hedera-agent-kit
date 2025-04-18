@@ -1,11 +1,11 @@
 import { describe, expect, it, beforeAll } from "vitest";
-import { NetworkType } from "./types";
+import { NetworkType } from "../types";
 import * as dotenv from "dotenv";
-import { NetworkClientWrapper } from "./utils/testnetClient";
-import { HederaMirrorNodeClient } from "./utils/hederaMirrorNodeClient";
-import { LangchainAgent } from "./utils/langchainAgent";
-import { wait } from "./utils/utils";
-import { HCSMessage } from "../types";
+import { NetworkClientWrapper } from "../utils/testnetClient";
+import { HederaMirrorNodeClient } from "../utils/hederaMirrorNodeClient";
+import { LangchainAgent } from "../utils/langchainAgent";
+import { wait } from "../utils/utils";
+import { HCSMessage } from "../../types";
 
 const IS_CUSTODIAL = true;
 
@@ -53,7 +53,6 @@ describe("get_topic_messages", () => {
             networkClientWrapper = new NetworkClientWrapper(
                 process.env.HEDERA_ACCOUNT_ID!,
                 process.env.HEDERA_PRIVATE_KEY!,
-                process.env.HEDERA_PUBLIC_KEY!,
                 process.env.HEDERA_KEY_TYPE!,
                 "testnet",
             );
@@ -138,7 +137,7 @@ describe("get_topic_messages", () => {
                     user: "user",
                     text: textPrompt,
                 };
-
+                console.log(`sending prompt`);
                 const response = await langchainAgent.sendPrompt(prompt, IS_CUSTODIAL);
                 const messages = extractTopicMessages(response.messages);
 

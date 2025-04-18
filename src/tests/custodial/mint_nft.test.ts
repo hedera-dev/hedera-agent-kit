@@ -1,10 +1,10 @@
 import { describe, expect, it, beforeAll, beforeEach } from "vitest";
-import { NetworkType} from "./types";
+import { NetworkType} from "../types";
 import * as dotenv from "dotenv";
-import { NetworkClientWrapper } from "./utils/testnetClient";
-import { HederaMirrorNodeClient } from "./utils/hederaMirrorNodeClient";
-import { LangchainAgent } from "./utils/langchainAgent";
-import { wait } from "./utils/utils";
+import { NetworkClientWrapper } from "../utils/testnetClient";
+import { HederaMirrorNodeClient } from "../utils/hederaMirrorNodeClient";
+import { LangchainAgent } from "../utils/langchainAgent";
+import { wait } from "../utils/utils";
 
 dotenv.config();
 
@@ -20,7 +20,6 @@ describe("hedera_mint_nft", () => {
             networkClientWrapper = new NetworkClientWrapper(
                 process.env.HEDERA_ACCOUNT_ID!,
                 process.env.HEDERA_PRIVATE_KEY!,
-                process.env.HEDERA_PUBLIC_KEY!,
                 process.env.HEDERA_KEY_TYPE!,
                 "testnet"
             );

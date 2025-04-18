@@ -1,6 +1,7 @@
 import { Tool, ToolRunnableConfig } from "@langchain/core/tools";
 import HederaAgentKit from "../../../agent";
 import { CallbackManagerForToolRun } from "@langchain/core/callbacks/manager";
+import { ExecutorAccountDetails } from "../../../types";
 
 export class HederaTransferHbarTool extends Tool {
     name = 'hedera_transfer_native_hbar_token';
@@ -24,12 +25,18 @@ Example usage:
     protected override async _call(input: any, _runManager?: CallbackManagerForToolRun, config?: ToolRunnableConfig): Promise<string> {
         try {
             const isCustodial = config?.configurable?.isCustodial === true;
+            const executorAccountDetails: ExecutorAccountDetails = config?.configurable?.executorAccountDetails;
+
             console.log(`hedera_transfer_native_hbar_token tool has been called (${isCustodial ? 'custodial' : 'non-custodial'})`);
 
             const parsedInput = JSON.parse(input);
             return this.hederaKit
-                .transferHbar(parsedInput.toAccountId, parsedInput.amount, isCustodial)
-                .then(response => response.getStringifiedResponse());
+                .transferHbar(
+                  parsedInput.toAccountId,
+                  parsedInput.amount,
+                  isCustodial,
+                  executorAccountDetails
+                ).then(response => response.getStringifiedResponse());
 
         } catch (error: any) {
             return JSON.stringify({

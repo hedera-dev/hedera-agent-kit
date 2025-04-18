@@ -1,6 +1,8 @@
 import { Tool, ToolRunnableConfig } from "@langchain/core/tools";
 import HederaAgentKit from "../../../agent";
 import { CallbackManagerForToolRun } from "@langchain/core/callbacks/manager";
+import { ExecutorAccountDetails, HederaNetworkType } from "../../../types";
+import { toBaseUnit } from "../../../utils/hts-format-utils";
 
 export class HederaMintFungibleTokenTool extends Tool {
     name = 'hedera_mint_fungible_token';
@@ -24,12 +26,21 @@ Example usage:
     protected override async _call(input: any, _runManager?: CallbackManagerForToolRun, config?: ToolRunnableConfig): Promise<string> {
         try {
             const isCustodial = config?.configurable?.isCustodial === true;
+            const executorAccountDetails: ExecutorAccountDetails = config?.configurable?.executorAccountDetails;
+
             console.log(`hedera_mint_fungible_token tool has been called (${isCustodial ? 'custodial' : 'non-custodial'})`);
 
             const parsedInput = JSON.parse(input);
 
+            const details = await this.hederaKit.getHtsTokenDetails(
+              parsedInput?.tokenId,
+              process.env.HEDERA_NETWORK_TYPE as HederaNetworkType,
+            )
+
+            const displayUnitAmount = await toBaseUnit(details.token_id, parsedInput.amount, this.hederaKit.network);
+
             return await this.hederaKit
-                .mintToken(parsedInput.tokenId, parsedInput.amount, isCustodial)
+                .mintToken(parsedInput.tokenId, displayUnitAmount.toNumber(), isCustodial, executorAccountDetails)
                 .then(response => response.getStringifiedResponse());
         } catch (error: any) {
             return JSON.stringify({

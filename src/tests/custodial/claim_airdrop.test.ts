@@ -1,11 +1,11 @@
 import { describe, beforeAll, expect, it, afterAll } from "vitest";
-import { AccountData } from "./utils/testnetUtils";
-import { LangchainAgent } from "./utils/langchainAgent";
-import { NetworkClientWrapper } from "./utils/testnetClient";
+import { AccountData } from "../utils/testnetUtils";
+import { LangchainAgent } from "../utils/langchainAgent";
+import { NetworkClientWrapper } from "../utils/testnetClient";
 import * as dotenv from "dotenv";
-import { HederaMirrorNodeClient } from "./utils/hederaMirrorNodeClient";
-import { NetworkType } from "./types";
-import { wait } from "./utils/utils";
+import { HederaMirrorNodeClient } from "../utils/hederaMirrorNodeClient";
+import { NetworkType } from "../types";
+import { wait } from "../utils/utils";
 
 const IS_CUSTODIAL = true;
 
@@ -33,16 +33,15 @@ describe("claim_pending_airdrops", () => {
             hederaMirrorNodeClient = new HederaMirrorNodeClient("testnet" as NetworkType);
 
             networkClientWrapper = new NetworkClientWrapper(
-                process.env.HEDERA_ACCOUNT_ID!,
-                process.env.HEDERA_PRIVATE_KEY!,
-                process.env.HEDERA_PUBLIC_KEY!,
-                process.env.HEDERA_KEY_TYPE!,
-                "testnet" as NetworkType
+              process.env.HEDERA_ACCOUNT_ID!,
+              process.env.HEDERA_PRIVATE_KEY!,
+              process.env.HEDERA_KEY_TYPE!,
+              "testnet"
             );
 
 
             // Create test account
-            const startingHbars = 10;
+            const startingHbars = 20;
             const autoAssociation = 0; // no auto association
             airdropCreatorAccount = await networkClientWrapper.createAccount(
                 startingHbars,
@@ -69,7 +68,6 @@ describe("claim_pending_airdrops", () => {
                 new NetworkClientWrapper(
                     airdropCreatorAccount.accountId,
                     airdropCreatorAccount.privateKey,
-                    airdropCreatorAccount.publicKey,
                     "ECDSA",
                     "testnet"
                 );

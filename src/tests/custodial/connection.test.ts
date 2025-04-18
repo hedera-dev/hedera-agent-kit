@@ -1,5 +1,5 @@
 import { describe, it, expect} from "vitest";
-import { LangchainAgent } from "./utils/langchainAgent";
+import { LangchainAgent } from "../utils/langchainAgent";
 
 describe("Test connection with Langchain", () => {
   it("Test connection with Langchain", async () => {

@@ -1,10 +1,10 @@
 import { describe, expect, it, beforeAll, beforeEach } from "vitest";
-import { NetworkType } from "./types";
+import { NetworkType } from "../types";
 import * as dotenv from "dotenv";
-import { NetworkClientWrapper } from "./utils/testnetClient";
-import { HederaMirrorNodeClient } from "./utils/hederaMirrorNodeClient";
-import { LangchainAgent } from "./utils/langchainAgent";
-import { wait } from "./utils/utils";
+import { NetworkClientWrapper } from "../utils/testnetClient";
+import { HederaMirrorNodeClient } from "../utils/hederaMirrorNodeClient";
+import { LangchainAgent } from "../utils/langchainAgent";
+import { wait } from "../utils/utils";
 
 dotenv.config();
 
@@ -13,8 +13,6 @@ const IS_CUSTODIAL = true;
 interface MintTokenLangchainResponse {
   status: string;
   message: string;
-  tokenId: string;
-  amount: number;
   txHash: string;
 }
 
@@ -52,11 +50,10 @@ describe("hedera_mint_fungible_token", () => {
     beforeAll(async () => {
             hederaApiClient = new HederaMirrorNodeClient("testnet" as NetworkType);
             networkClientWrapper = new NetworkClientWrapper(
-                process.env.HEDERA_ACCOUNT_ID!,
-                process.env.HEDERA_PRIVATE_KEY!,
-                process.env.HEDERA_PUBLIC_KEY!,
-                process.env.HEDERA_KEY_TYPE!,
-                "testnet"
+              process.env.HEDERA_ACCOUNT_ID!,
+              process.env.HEDERA_PRIVATE_KEY!,
+              process.env.HEDERA_KEY_TYPE!,
+              "testnet"
             );
         });
 
@@ -128,9 +125,9 @@ describe("hedera_mint_fungible_token", () => {
     const tokenId = await networkClientWrapper.createFT({
       name: "TokenToMint",
       symbol: "TTM",
-      maxSupply: 100_000_000, // this is 1_000_000 tokens in display units
+      maxSupply: 100_000_000, // given in base units. This is 1_000_000 tokens in display units
       decimals: DECIMALS,
-      initialSupply: STARTING_SUPPLY,
+      initialSupply: STARTING_SUPPLY, // given in base units
       isSupplyKey: true,
     });
 
@@ -140,16 +137,18 @@ describe("hedera_mint_fungible_token", () => {
     };
 
     langchainAgent = await LangchainAgent.create();
-    const resp = await langchainAgent.sendPrompt(prompt);
+    const resp = await langchainAgent.sendPrompt(prompt, IS_CUSTODIAL);
     const langchainResponse = extractLangchainResponse(resp.messages);
-    const mintedAmountFromResponseInDisplayUnits = langchainResponse?.amount;
 
     await wait(5000);
 
-    const mirrorNodeTokenInfo = await hederaApiClient.getTokenDetails(tokenId);
+    const tokenInfo = await hederaApiClient.getTokenDetails(tokenId);
+    console.log(JSON.stringify(tokenInfo, null, 2));
 
-    expect(Number(mirrorNodeTokenInfo.total_supply)).toBe(
-      Number(mintedAmountFromResponseInDisplayUnits) * 10 ** DECIMALS
+    expect(langchainResponse).toBeDefined();
+    expect(langchainResponse!.status).toBe("success");
+    expect(Number(tokenInfo.total_supply) / Math.pow(10, DECIMALS)).toBe(
+      STARTING_SUPPLY / Math.pow(10, DECIMALS) + TOKENS_TO_MINT_IN_DISPLAY_UNITS
     );
   });
 });

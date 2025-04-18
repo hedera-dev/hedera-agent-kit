@@ -1,11 +1,11 @@
 import { describe, expect, it, beforeAll } from "vitest";
-import { HederaMirrorNodeClient } from "./utils/hederaMirrorNodeClient";
+import { HederaMirrorNodeClient } from "../utils/hederaMirrorNodeClient";
 import * as dotenv from "dotenv";
-import { NetworkClientWrapper } from "./utils/testnetClient";
-import { AccountData } from "./utils/testnetUtils";
-import {LangchainAgent} from "./utils/langchainAgent";
-import {NetworkType} from "./types";
-import { wait } from "./utils/utils";
+import { NetworkClientWrapper } from "../utils/testnetClient";
+import { AccountData } from "../utils/testnetUtils";
+import {LangchainAgent} from "../utils/langchainAgent";
+import {NetworkType} from "../types";
+import { wait } from "../utils/utils";
 
 const IS_CUSTODIAL = true;
 
@@ -31,11 +31,10 @@ describe("reject_token", async () => {
             hederaMirrorNodeClient = new HederaMirrorNodeClient("testnet" as NetworkType);
 
             networkClientWrapper = new NetworkClientWrapper(
-                process.env.HEDERA_ACCOUNT_ID!,
-                process.env.HEDERA_PRIVATE_KEY!,
-                process.env.HEDERA_PUBLIC_KEY!,
-                process.env.HEDERA_KEY_TYPE!,
-                "testnet"
+              process.env.HEDERA_ACCOUNT_ID!,
+              process.env.HEDERA_PRIVATE_KEY!,
+              process.env.HEDERA_KEY_TYPE!,
+              "testnet"
             );
 
             const autoAssociationsCount =
@@ -60,14 +59,13 @@ describe("reject_token", async () => {
             }
 
             // Create test account
-            const startingHbars = 10;
+            const startingHbars = 20;
             const autoAssociation = -1; // unlimited
             acc1 = await networkClientWrapper.createAccount(startingHbars, autoAssociation);
 
             airdropCreatorNetworkClientWrapper = new NetworkClientWrapper(
                 acc1.accountId,
                 acc1.privateKey,
-                acc1.publicKey,
                 "ECDSA",
                 "testnet"
             );
