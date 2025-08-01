@@ -14,6 +14,10 @@ import {
   createTopicParameters,
   createTopicParametersNormalised,
 } from '@/shared/parameter-schemas/hcs.zod';
+import {
+  transferERC721Parameters
+} from '@/shared/parameter-schemas/erc721.zod';
+
 import { Client, Hbar, PublicKey, TokenSupplyType, TokenType } from '@hashgraph/sdk';
 import { Context } from '@/shared/configuration';
 import z from 'zod';
@@ -306,6 +310,7 @@ export default class HederaParameterNormaliser {
     };
   }
 
+<<<<<<< HEAD
   static async normaliseTransferERC20Params(
     params: z.infer<ReturnType<typeof transferERC20Parameters>>,
     factoryContractAbi: string[],
@@ -357,4 +362,15 @@ export default class HederaParameterNormaliser {
     const account = await mirrorNode.getAccount(address);
     return account.accountId;
   }
+=======
+  static normaliseTransferERC721Params(
+    params: z.infer<ReturnType<typeof transferERC721Parameters>>,
+    _context: Context,
+  ) {
+    return {
+      ...params,
+      gas: 10_000_000,
+    };
+  }
+>>>>>>> 245a898 (Merged main and resolved conflicts)
 }
