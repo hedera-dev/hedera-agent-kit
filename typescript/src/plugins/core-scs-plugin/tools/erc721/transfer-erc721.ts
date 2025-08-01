@@ -40,7 +40,6 @@ const transferERC721 = async (
   params: z.infer<ReturnType<typeof transferERC721Parameters>>,
 ) => {
   try {
-    console.log('transferERC721', JSON.stringify(params, null, 2));
     const mirrorNode = getMirrornodeService(context.mirrornodeService, client.ledgerId!);
 
     const normalisedParams = await HederaParameterNormaliser.normaliseTransferERC721Params(
@@ -50,9 +49,7 @@ const transferERC721 = async (
       context,
       mirrorNode,
     );
-    console.log('normalisedParams', JSON.stringify(normalisedParams, null, 2));
     const tx = HederaBuilder.executeTransaction(normalisedParams);
-    console.log('tx', JSON.stringify(tx, null, 2));
     const result = await handleTransaction(tx, client, context);
     return result;
   } catch (error) {
