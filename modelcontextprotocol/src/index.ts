@@ -143,13 +143,13 @@ export async function main() {
     plugins: [coreHTSPlugin, coreAccountPlugin, coreConsensusPlugin, coreQueriesPlugin],
   }
 
-  const server = new HederaMCPToolkit({
+  const toolkit = new HederaMCPToolkit({
     client: client,
     configuration: configuration,
   });
 
   const transport = new StdioServerTransport();
-  await server.connect(transport);
+  await toolkit.server.connect(transport);
   // We use console.error instead of console.log since console.log will output to stdio, which will confuse the MCP server
   console.error(green('✅ Hedera MCP Server running on stdio'));
 }
