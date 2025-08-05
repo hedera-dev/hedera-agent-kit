@@ -104,12 +104,7 @@ import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { AgentExecutor, createToolCallingAgent } from 'langchain/agents';
 import { Client, PrivateKey } from '@hashgraph/sdk';
 import { 
-  HederaLangchainToolkit, 
-  AgentMode, 
-  coreQueriesPlugin, 
-  coreAccountPlugin, 
-  coreConsensusPlugin, 
-  coreHTSPlugin 
+  HederaLangchainToolkit,AgentMode, coreQueriesPlugin,coreAccountPlugin, coreConsensusPlugin, coreHTSPlugin 
 } from 'hedera-agent-kit';
 
 async function main() {
@@ -120,8 +115,8 @@ async function main() {
 
   // Hedera client setup (Testnet by default)
   const client = Client.forTestnet().setOperator(
-    process.env.ACCOUNT_ID!,
-    PrivateKey.fromStringECDSA(process.env.PRIVATE_KEY!),
+    process.env.ACCOUNT_ID,
+    PrivateKey.fromStringDer(process.env.PRIVATE_KEY),
   ); // get these from https://portal.hedera.com
 
   // Prepare Hedera toolkit with plugins
