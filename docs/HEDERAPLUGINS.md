@@ -2,6 +2,8 @@
 
 The Hedera Agent Kit provides a comprehensive set of tools organized into **plugins** by the type of Hedera service they interact with. These tools can be used both by the conversational agent and when you are building with the SDK.
 
+Want additional Hedera tools? [Open an issue](https://github.com/hedera-dev/hedera-agent-kit/issues/new?template=toolkit_feature_request.yml&labels=feature-request).
+
 ## Plugin Architecture
 
 The tools are now organized into plugins, each containing related functionality:
@@ -12,16 +14,15 @@ The tools are now organized into plugins, each containing related functionality:
 - **Core Queries Plugin**: Tools for querying Hedera network data
 
 Plugins can be found in [typescript/src/plugins](../typescript/src/plugins)
-
-Want additional Hedera tools? [Open an issue](https://github.com/hedera-dev/hedera-agent-kit/issues/new?template=toolkit_feature_request.yml&labels=feature-request).
+ 
 
 ## Plugins and Available Tools
 
 ### Core Account Plugin Tools (core-account-plugin)
 This plugin provides tools for Hedera Account Service operations
 
-| Tool Name                                       | Description                                        |  Usage                                             |
-| ----------------------------------------------- | -------------------------------------------------- | --------------------------------------------------------- |
+| Tool Name                                       | Description                                        |Usage                                             |
+| ----------------------------------------------- | -------------------------------------------------- |--------------------------------------------------------- |
 | `TRANSFER_HBAR_TOOL`| Transfer HBAR between accounts | Provide the amount of of HBAR to transfer, the account to transfer to, and optionally, a transaction memo.|
 
 ### Core Hedera Consensus Service Plugin Tools (core-consensus-plugin)
