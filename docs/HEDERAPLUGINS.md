@@ -18,11 +18,11 @@ Want additional Hedera tools? [Open an issue](https://github.com/hedera-dev/hede
 ## Plugins and Available Tools
 
 ### Core Account Plugin Tools (core-account-plugin)
-Usiung the plugin for Hedera Account Service operations
+This plugin provides tools for Hedera Account Service operations
 
 | Tool Name                                       | Description                                        |  Usage                                             |
 | ----------------------------------------------- | -------------------------------------------------- | --------------------------------------------------------- |
-| `TRANSFER_HBAR_TOOL| Transfer HBAR between accounts | Provide the amount of of HBAR to transfer, the account to transfer to, and optionally, a transaction memo.|
+| `TRANSFER_HBAR_TOOL`| Transfer HBAR between accounts | Provide the amount of of HBAR to transfer, the account to transfer to, and optionally, a transaction memo.|
 
 ### Core Hedera Consensus Service Plugin Tools (core-consensus-plugin)
 
@@ -37,10 +37,10 @@ A plugin for the Hedera Token Service (HTS), enabling you to create and manage f
 | Tool Name                                       | Description                                        |  Usage                                             |
 | ----------------------------------------------- | -------------------------------------------------- | --------------------------------------------------------- |
 | `CREATE_FUNGIBLE_TOKEN_TOOL`| Creates a fungible token on Hedera | Provide the token name (string, required). Optionally provide token symbol (string), initial supply (int), supply type ("finite" or "infinite", defaults to "finite"), max supply (int, defaults to 1,000,000 if finite), decimals (int, defaults to 0), treasury account ID (string, uses operator account if not specified), and whether to set supply key (boolean)|
-| `CREATE_NON_FUNGIBLE_TOKEN_TOOL`| Creates a non-fungible token (NFT) on Hedera | Provide the token name (string, required) and token symbol (string, required). Optionally provide max supply (int, defaults to 100) and treasury account ID (string, uses operator account if not specified)|
-| `AIRDROP_FUNGIBLE_TOKEN_TOOL`| Airdrops a fungible token to multiple recipients on Hedera | Provide the token ID (string, required) and recipients array (required - each containing accountId and amount). Optionally provide source account ID (string, uses operator account if not specified) and transaction memo (string)|
-| `MINT_NON_FUNGIBLE_TOKEN_TOOL`| Mints NFTs with unique metadata for an existing NFT class on Hedera | Provide the token ID (string, required) and URIs array (required - maximum 10 strings containing metadata URIs)|
-| `MINT_FUNGIBLE_TOKEN_TOOL`| Mints additional supply of an existing fungible token on Hedera | Provide the token ID (string, required) and amount to mint (number, required)|
+| `CREATE_NON_FUNGIBLE_TOKEN_TOOL`| Creates a non-fungible token (NFT) on Hedera | Provide the token name and token symbol. Optionally provide max supply (defaults to 100) and treasury account ID |
+| `AIRDROP_FUNGIBLE_TOKEN_TOOL`| Airdrops a fungible token to multiple recipients on Hedera | Provide the token ID and recipients array. Optionally provide source account ID (string, uses operator account if not specified) and transaction memo (string)|
+| `MINT_NON_FUNGIBLE_TOKEN_TOOL`| Mints NFTs with unique metadata for an existing NFT class on Hedera | Provide the token ID and URIs array |
+| `MINT_FUNGIBLE_TOKEN_TOOL`| Mints additional supply of an existing fungible token on Hedera | Provide the token ID and amount to mint|
 
 ### Core Hedera Queries Plugin Tools (core-queries-plugin)
 These tools provided by the toolkit enable you to complete (free) queries against mirror nodes on the Hedera network.
