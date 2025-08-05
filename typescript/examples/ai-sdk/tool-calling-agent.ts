@@ -1,4 +1,4 @@
-import { HederaAIToolkit, AgentMode, hederaTools } from 'hedera-agent-kit';
+import { HederaAIToolkit, AgentMode, coreHTSPlugin, coreQueriesPlugin, coreAccountPlugin } from 'hedera-agent-kit';
 import { Client, PrivateKey } from '@hashgraph/sdk';
 import prompts from 'prompts';
 import * as dotenv from 'dotenv';
@@ -13,23 +13,14 @@ async function bootstrap(): Promise<void> {
     PrivateKey.fromStringECDSA(process.env.PRIVATE_KEY!),
   );
 
-  // Only the four tools
-  const {
-    CREATE_FUNGIBLE_TOKEN_TOOL,
-    CREATE_TOPIC_TOOL,
-    SUBMIT_TOPIC_MESSAGE_TOOL,
-    GET_HBAR_BALANCE_QUERY_TOOL,
-  } = hederaTools;
-
   // Prepare Hedera toolkit (load only selected tools)
   const hederaAgentToolkit = new HederaAIToolkit({
     client,
     configuration: {
-      tools: [
-        CREATE_TOPIC_TOOL,
-        SUBMIT_TOPIC_MESSAGE_TOOL,
-        CREATE_FUNGIBLE_TOKEN_TOOL,
-        GET_HBAR_BALANCE_QUERY_TOOL,
+      plugins: [
+        coreHTSPlugin,
+        coreQueriesPlugin,
+        coreAccountPlugin
       ],
       context: {
         mode: AgentMode.AUTONOMOUS,

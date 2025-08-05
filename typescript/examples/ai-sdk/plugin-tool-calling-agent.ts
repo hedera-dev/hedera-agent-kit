@@ -1,10 +1,9 @@
-import { HederaAIToolkit, AgentMode, hederaTools } from 'hedera-agent-kit';
+import { HederaAIToolkit, AgentMode, coreHTSPlugin, coreQueriesPlugin, coreAccountPlugin } from 'hedera-agent-kit';
 import { Client, PrivateKey } from '@hashgraph/sdk';
 import prompts from 'prompts';
 import * as dotenv from 'dotenv';
 import { openai } from '@ai-sdk/openai';
 import { generateText, wrapLanguageModel } from 'ai';
-import { examplePlugin } from '../plugin/example-plugin';
 dotenv.config();
 
 async function bootstrap(): Promise<void> {
@@ -14,29 +13,15 @@ async function bootstrap(): Promise<void> {
     PrivateKey.fromStringECDSA(process.env.PRIVATE_KEY!),
   );
 
-  // Core Hedera tools
-  const {
-    CREATE_FUNGIBLE_TOKEN_TOOL,
-    CREATE_TOPIC_TOOL,
-    SUBMIT_TOPIC_MESSAGE_TOOL,
-    GET_HBAR_BALANCE_QUERY_TOOL,
-  } = hederaTools;
-
   // Prepare Hedera toolkit with core tools AND custom plugin
   const hederaAgentToolkit = new HederaAIToolkit({
     client,
     configuration: {
-      tools: [
-        // Core tools
-        CREATE_TOPIC_TOOL,
-        SUBMIT_TOPIC_MESSAGE_TOOL,
-        CREATE_FUNGIBLE_TOKEN_TOOL,
-        GET_HBAR_BALANCE_QUERY_TOOL,
-        // Plugin tools
-        'example_greeting_tool',
-        'example_hbar_transfer_tool',
+      plugins: [
+        coreHTSPlugin,
+        coreQueriesPlugin,
+        coreAccountPlugin
       ],
-      plugins: [examplePlugin], // Add the example plugin
       context: {
         mode: AgentMode.AUTONOMOUS,
       },
