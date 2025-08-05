@@ -5,4 +5,4 @@ These tools can be used both by the conversational agent and when you are buildi
 
 ## Plugin Architecture
 
-The tools are now organized into plugins, each containing a set functionality related to the service or project they are for:
+The tools are now organized into plugins, each containing a set functionality related to the service or project they are for
