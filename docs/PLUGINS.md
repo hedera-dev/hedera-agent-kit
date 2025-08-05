@@ -1,8 +1,17 @@
 # Available Tools
 
-The Hedera Agent Kit provides a comprehensive set of tools organized by service type. These tools can be used both by the conversational agent and programmatically.
+The Hedera Agent Kit provides a comprehensive set of tools organized into **plugins** by the type of Hedera service they interact with. These tools can be used both by the conversational agent and when you are building with the SDK.
 
-Tools can be found in [typescript/src/shared/tools](../typescript/src/shared/tools)
+## Plugin Architecture
+
+The tools are now organized into plugins, each containing related functionality:
+
+- **Core Account Plugin**: Tools for Hedera Account Service operations
+- **Core Consensus Plugin**: Tools for Hedera Consensus Service (HCS) operations  
+- **Core HTS Plugin**: Tools for Hedera Token Service operations
+- **Core Queries Plugin**: Tools for querying Hedera network data
+
+Plugins can be found in [typescript/src/plugins](../typescript/src/plugins)
 
 Want additional Hedera tools? [Open an issue](https://github.com/hedera-dev/hedera-agent-kit/issues/new?template=toolkit_feature_request.yml&labels=feature-request).
 
