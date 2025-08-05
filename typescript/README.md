@@ -103,8 +103,14 @@ import { ChatOpenAI } from '@langchain/openai';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { AgentExecutor, createToolCallingAgent } from 'langchain/agents';
 import { Client, PrivateKey } from '@hashgraph/sdk';
-import { HederaLangchainToolkit, coreQueriesPlugin } from 'hedera-agent-kit';
-
+import { 
+  HederaLangchainToolkit, 
+  AgentMode, 
+  coreQueriesPlugin, 
+  coreAccountPlugin, 
+  coreConsensusPlugin, 
+  coreHTSPlugin 
+} from 'hedera-agent-kit';
 
 async function main() {
   // Initialise OpenAI LLM
@@ -114,20 +120,30 @@ async function main() {
 
   // Hedera client setup (Testnet by default)
   const client = Client.forTestnet().setOperator(
-    process.env.ACCOUNT_ID,
-    PrivateKey.fromStringDer(process.env.PRIVATE_KEY),
+    process.env.ACCOUNT_ID!,
+    PrivateKey.fromStringECDSA(process.env.PRIVATE_KEY!),
   ); // get these from https://portal.hedera.com
 
+  // Prepare Hedera toolkit with plugins
   const hederaAgentToolkit = new HederaLangchainToolkit({
     client,
     configuration: {
-      plugins: [coreQueriesPlugin] // all our core plugins here https://github.com/hedera-dev/hedera-agent-kit/tree/main/typescript/src/plugins
+      tools: [], // use an empty array to load all tools from plugins
+      context: {
+        mode: AgentMode.AUTONOMOUS,
+      },
+      plugins: [
+        coreQueriesPlugin,    // For account queries and balances
+        coreAccountPlugin,    // For HBAR transfers
+        coreConsensusPlugin,  // For HCS topics and messages
+        coreHTSPlugin,        // For token operations
+      ],
     },
   });
   
   // Load the structured chat prompt template
   const prompt = ChatPromptTemplate.fromMessages([
-    ['system', 'You are a helpful assistant'],
+    ['system', 'You are a helpful assistant with access to Hedera blockchain tools'],
     ['placeholder', '{chat_history}'],
     ['human', '{input}'],
     ['placeholder', '{agent_scratchpad}'],
@@ -143,14 +159,15 @@ async function main() {
     prompt,
   });
   
-  // Wrap everything in an executor that will maintain memory
+  // Wrap everything in an executor
   const agentExecutor = new AgentExecutor({
     agent,
     tools,
+    returnIntermediateSteps: false,
   });
   
   const response = await agentExecutor.invoke({ input: "what's my balance?" });
-  console.log(response);
+  console.log(`AI: ${response?.output ?? response}`);
 }
 
 main().catch(console.error);
