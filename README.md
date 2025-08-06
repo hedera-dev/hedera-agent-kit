@@ -40,6 +40,11 @@ Want to add more functionality from Hedera Services? [Open an issue](https://git
 ## 🚀 60-Second Quick-Start
 See more info at [https://www.npmjs.com/package/hedera-agent-kit](https://www.npmjs.com/package/hedera-agent-kit)
 
+### 🆓 Free AI Options Available!
+- **Ollama**: 100% free, runs on your computer, no API key needed
+- **Groq**: Offers generous free tier with API key
+- **Claude & OpenAI**: Paid options for production use
+
 ### 1 – Project Setup
 Create a directory for your project and install dependencies:
 ```bash
@@ -53,7 +58,22 @@ npm init -y
 ```
 
 ```bash
-npm install hedera-agent-kit @langchain/openai @langchain/core langchain @hashgraph/sdk dotenv
+npm install hedera-agent-kit @langchain/core langchain @hashgraph/sdk dotenv
+```
+
+Then install ONE of these AI provider packages:
+```bash
+# Option 1: OpenAI (requires API key)
+npm install @langchain/openai
+
+# Option 2: Anthropic Claude (requires API key)
+npm install @langchain/anthropic
+
+# Option 3: Groq (free tier available)
+npm install @langchain/groq
+
+# Option 4: Ollama (100% free, runs locally)
+npm install @langchain/ollama
 ```
 
 
@@ -67,9 +87,15 @@ If you already have a **testnet** account, you can use it. Otherwise, you can cr
 
 Add the following to the .env file:
 ```env
-ACCOUNT_ID="0.0.xxxxx" # your operator account ID from https://portal.hedera.com/dashboard
-PRIVATE_KEY="0x..." # ECDSA encoded private key
-OPENAI_API_KEY="sk-proj-..." # Create an OpenAPI Key at https://platform.openai.com/api-keys
+# Required: Hedera credentials (get free testnet account at https://portal.hedera.com/dashboard)
+HEDERA_ACCOUNT_ID="0.0.xxxxx"
+HEDERA_PRIVATE_KEY="0x..." # ECDSA encoded private key
+
+# Optional: Add the API key for your chosen AI provider
+OPENAI_API_KEY="sk-proj-..."      # For OpenAI (https://platform.openai.com/api-keys)
+ANTHROPIC_API_KEY="sk-ant-..."    # For Claude (https://console.anthropic.com)
+GROQ_API_KEY="gsk_..."            # For Groq free tier (https://console.groq.com/keys)
+# Ollama doesn't need an API key (runs locally)
 ```
 
 
@@ -85,27 +111,58 @@ Once you have created a new file `index.js` and added the environment variables,
 
 ```javascript
 // index.js
-import dotenv from 'dotenv';
+const dotenv = require('dotenv');
 dotenv.config();
 
-import { ChatOpenAI } from '@langchain/openai';
-import { ChatPromptTemplate } from '@langchain/core/prompts';
-import { AgentExecutor, createToolCallingAgent } from 'langchain/agents';
-import { Client, PrivateKey } from '@hashgraph/sdk';
-import { HederaLangchainToolkit, coreQueriesPlugin } from 'hedera-agent-kit';
+const { ChatPromptTemplate } = require('@langchain/core/prompts');
+const { AgentExecutor, createToolCallingAgent } = require('langchain/agents');
+const { Client, PrivateKey } = require('@hashgraph/sdk');
+const { HederaLangchainToolkit, coreQueriesPlugin } = require('hedera-agent-kit');
 
+// Choose your AI provider (install the one you want to use)
+function createLLM() {
+  // Option 1: OpenAI (requires OPENAI_API_KEY in .env)
+  if (process.env.OPENAI_API_KEY) {
+    const { ChatOpenAI } = require('@langchain/openai');
+    return new ChatOpenAI({ model: 'gpt-4o-mini' });
+  }
+  
+  // Option 2: Anthropic Claude (requires ANTHROPIC_API_KEY in .env)
+  if (process.env.ANTHROPIC_API_KEY) {
+    const { ChatAnthropic } = require('@langchain/anthropic');
+    return new ChatAnthropic({ model: 'claude-3-haiku-20240307' });
+  }
+  
+  // Option 3: Groq (requires GROQ_API_KEY in .env)
+  if (process.env.GROQ_API_KEY) {
+    const { ChatGroq } = require('@langchain/groq');
+    return new ChatGroq({ model: 'llama3-8b-8192' });
+  }
+  
+  // Option 4: Ollama (free, local - requires Ollama installed and running)
+  try {
+    const { ChatOllama } = require('@langchain/ollama');
+    return new ChatOllama({ 
+      model: 'llama3.2',
+      baseUrl: 'http://localhost:11434'
+    });
+  } catch (e) {
+    console.error('No AI provider configured. Please either:');
+    console.error('1. Set OPENAI_API_KEY, ANTHROPIC_API_KEY, or GROQ_API_KEY in .env');
+    console.error('2. Install and run Ollama locally (https://ollama.com)');
+    process.exit(1);
+  }
+}
 
 async function main() {
-  // Initialise OpenAI LLM
-  const llm = new ChatOpenAI({
-    model: 'gpt-4o-mini',
-  });
+  // Initialize AI model
+  const llm = createLLM();
 
   // Hedera client setup (Testnet by default)
   const client = Client.forTestnet().setOperator(
-    process.env.ACCOUNT_ID,
-    PrivateKey.fromStringDer(process.env.PRIVATE_KEY),
-  ); // get these from https://portal.hedera.com
+    process.env.HEDERA_ACCOUNT_ID,
+    PrivateKey.fromStringECDSA(process.env.HEDERA_PRIVATE_KEY),
+  );
 
   const hederaAgentToolkit = new HederaLangchainToolkit({
     client,

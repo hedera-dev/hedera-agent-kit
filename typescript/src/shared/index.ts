@@ -5,3 +5,4 @@ export * from './plugin';
 export * from './tool-discovery';
 export * from './strategies/tx-mode-strategy';
 export * from './utils';
+export * from './constants/contracts';
