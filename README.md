@@ -424,8 +424,29 @@ This tool has two execution modes with AI agents;  autonomous excution and retur
  * `mode: AgentMode.RETURN_BYTE` the transaction will be executed, and the bytes to execute the Hedera transaction will be returned. 
  * `mode: AgentMode.AUTONOMOUS` the transaction will be executed autonomously, using the accountID set (the operator account can be set in the client with `.setOperator(process.env.ACCOUNT_ID!`)
 
-### Hedera Transaction Tools
-The Hedera Agent Kit provides a set of tools to execute transactions on the Hedera network, which we will be expanding in the future. 
+### Hedera Plugins & Tools
+The Hedera Agent Kit provides a set of tools, bundled into plugins, to execute transactions on the Hedera network, which we will be expanding in the future. 
+
+Currently, the following plugins are available:
+
+#### Available Plugins & Tools
+
+#### Core Account Plugin: Tools for Hedera Account Service operations
+* Transfer HBAR
+#### Core Consensus Plugin: Tools for Hedera Consensus Service (HCS) operations 
+* Create a Topic
+* Submit a message to a Topic 
+#### Core HTS Plugin: Tools for Hedera Token Service operations
+* Create a Fungible Token
+* Create a Non-Fungible Token
+* Airdrop Fungible Tokens
+* Transfer Fungible Tokens
+
+#### Core Queries Plugin: Tools for querying Hedera network data
+* Get Account Query
+* Get HBAR Balance Query
+* Get Account Token Balances Query
+* Get Topic Messages Query
 
 To request more functionality in the toolkit for:
 * [Token Service](https://docs.hedera.com/hedera/sdks-and-apis/sdks/token-service)
@@ -434,30 +455,13 @@ To request more functionality in the toolkit for:
 
 Please [open an issue](https://github.com/hedera-dev/hedera-agent-kit/issues/new?template=toolkit_feature_request.yml&labels=feature-request).
 
-**Available Tools**
-* Transfer HBAR
-* Create a Topic
-* Submit a message to a Topic
-* Create a Fungible Token
-* Create a Non-Fungible Token
-* Airdrop Fungible Tokens
-* Transfer Fungible Tokens
 
-See the implementation details in [docs/TOOLS.md](docs/TOOLS.md)
+See a more thorough description and how to implement the plugins in [docs/HEDERAPLUGINS.md](docs/HEDERAPLUGINS.md)
 
-### Hedera Mirror Node Query Tools
-The Hedera network is made up of two types of nodes: consensus nodes and mirror nodes. Mirror nodes are free to query, and maintain a copy of the state of the network for users to query. 
+---
 
-This toolkit provides a set of tools to query the state of the network, including accounts, tokens, and transactions. To request more functionality, please [open an issue](https://github.com/hedera-dev/hedera-agent-kit/issues/new?template=toolkit_feature_request.md&title=[FEATURE]%20-%20).
-
-The Hedera Agent Kit provides a set of tools to execute query these nodes:
-
-* Get Account Query
-* Get HBAR Balance Query
-* Get Account Token Balances Query
-* Get Topic Messages Query
-
-See the implementation details in [docs/TOOLS.md](docs/TOOLS.md)
+### Third Party Plugins
+_Coming Soon_
 
 ---
 
