@@ -7,6 +7,7 @@ import { createERC20Parameters } from '@/shared/parameter-schemas/erc20.zod';
 import HederaBuilder from '@/shared/hedera-utils/hedera-builder';
 import { PromptGenerator } from '@/shared/utils/prompt-generator';
 import HederaParameterNormaliser from '@/shared/hedera-utils/hedera-parameter-normaliser';
+import { getERC20FactoryAddress, ERC20_FACTORY_ABI } from '@/shared/constants/contracts';
 
 const createERC20Prompt = (context: Context = {}) => {
   const contextSnippet = PromptGenerator.getContextSnippet(context);
@@ -39,16 +40,11 @@ const createERC20 = async (
   params: z.infer<ReturnType<typeof createERC20Parameters>>,
 ) => {
   try {
-    //TODO: make this address configurable
-    const factoryContractAddress = '0.0.6471814';
-    // ABI for the deployToken function
-    const abi = [
-      'function deployToken(string memory name_, string memory symbol_, uint8 decimals_, uint256 initialSupply_) external returns (address)',
-    ];
+    const factoryContractAddress = getERC20FactoryAddress(client.ledgerId!);
     const normalisedParams = HederaParameterNormaliser.normaliseCreateERC20Params(
       params,
       factoryContractAddress,
-      abi,
+      ERC20_FACTORY_ABI,
       'deployToken',
     );
     const tx = HederaBuilder.executeTransaction(normalisedParams);
