@@ -65,7 +65,7 @@ You will also need to import the constants for each tool name, such as `coreAcco
 `AgentMode` , `Configuration`, and `Context` are also required to be imported to configure the plugins.
 
 ```javascript
-import { AgentMode, Configuration, Context, coreAccountPlugin, coreAccountPluginToolNames, coreConsensusPlugin, coreConsensusPluginToolNames, coreHTSPlugin, coreHTSPluginToolNames, coreQueriesPlugin, coreQueriesPluginToolNames, HederaMCPToolkit } from 'hedera-agent-kit';
+import { AgentMode, Configuration, Context, coreAccountPlugin, coreAccountPluginToolNames, coreConsensusPlugin, coreConsensusPluginToolNames, coreHTSPlugin, coreHTSPluginToolNames, coreQueriesPlugin, coreQueriesPluginToolNames,} from 'hedera-agent-kit';
 ```
 
 You will instantiate the HederaAgentToolkit with your chosen framework, defining the tools and plugins you want to use, and mode (AUTONOMOUS or RETURN_BYTES for human in the loop), as well as the plugins you wish to use:
