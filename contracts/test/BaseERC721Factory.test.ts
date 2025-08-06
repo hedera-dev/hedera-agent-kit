@@ -34,8 +34,7 @@ describe("BaseERC721Factory", function () {
       const tx = await factory.deployToken(
         tokenName,
         tokenSymbol,
-        baseURI,
-        owner.address
+        baseURI
       );
 
       const receipt = await tx.wait();
@@ -46,8 +45,7 @@ describe("BaseERC721Factory", function () {
       const tx = await factory.deployToken(
         tokenName,
         tokenSymbol,
-        baseURI,
-        owner.address
+        baseURI
       );
 
       const receipt = await tx.wait();
@@ -58,8 +56,7 @@ describe("BaseERC721Factory", function () {
       const tx = await factory.deployToken(
         tokenName,
         tokenSymbol,
-        baseURI,
-        owner.address
+        baseURI
       );
 
       const receipt = await tx.wait();
@@ -85,11 +82,10 @@ describe("BaseERC721Factory", function () {
     });
 
     it("Should set correct initial owner", async function () {
-      const tx = await factory.deployToken(
+      const tx = await factory.connect(addr1).deployToken(
         tokenName,
         tokenSymbol,
-        baseURI,
-        addr1.address
+        baseURI
       );
 
       const receipt = await tx.wait();
@@ -108,7 +104,7 @@ describe("BaseERC721Factory", function () {
 
     it("Should emit TokenDeployed event", async function () {
       await expect(
-        factory.deployToken(tokenName, tokenSymbol, baseURI, owner.address)
+        factory.deployToken(tokenName, tokenSymbol, baseURI)
       )
         .to.emit(factory, "TokenDeployed")
         .withArgs(owner.address, anyValue); // We accept any value as token address
@@ -118,15 +114,13 @@ describe("BaseERC721Factory", function () {
       const token1Address = await factory.deployToken(
         "NFT1",
         "NFT1",
-        "https://api.example.com/nft1/",
-        owner.address
+        "https://api.example.com/nft1/"
       );
 
       const token2Address = await factory.deployToken(
         "NFT2",
         "NFT2",
-        "https://api.example.com/nft2/",
-        addr1.address
+        "https://api.example.com/nft2/"
       );
 
       expect(token1Address).to.not.equal(token2Address);
@@ -141,7 +135,6 @@ describe("BaseERC721Factory", function () {
         "Empty URI NFT",
         "EUN",
         "",
-        owner.address
       );
 
       const receipt = await tx.wait();
@@ -162,8 +155,7 @@ describe("BaseERC721Factory", function () {
       const tx = await factory.deployToken(
         "IPFS NFT",
         "IPFS",
-        ipfsURI,
-        owner.address
+        ipfsURI
       );
 
       const receipt = await tx.wait();
@@ -184,8 +176,7 @@ describe("BaseERC721Factory", function () {
       const tx = await factory.deployToken(
         "HTTP NFT",
         "HTTP",
-        httpURI,
-        owner.address
+        httpURI
       );
 
       const receipt = await tx.wait();
@@ -202,11 +193,10 @@ describe("BaseERC721Factory", function () {
     });
 
     it("Should deploy token with different initial owners", async function () {
-      const tx = await factory.deployToken(
+      const tx = await factory.connect(addr2).deployToken(
         "Owner Test NFT",
         "OTN",
-        "https://api.example.com/",
-        addr2.address
+        "https://api.example.com/"
       );
 
       const receipt = await tx.wait();
@@ -231,8 +221,7 @@ describe("BaseERC721Factory", function () {
       const tx = await factory.connect(addr1).deployToken(
         "User NFT",
         "UNFT",
-        "https://api.example.com/",
-        addr1.address
+        "https://api.example.com/"
       );
 
       const receipt = await tx.wait();
@@ -252,18 +241,17 @@ describe("BaseERC721Factory", function () {
 
     it("Should emit event with correct deployer address", async function () {
       await expect(
-        factory.connect(addr1).deployToken("User NFT", "UNFT", "https://api.example.com/", addr1.address)
+        factory.connect(addr1).deployToken("User NFT", "UNFT", "https://api.example.com/")
       )
         .to.emit(factory, "TokenDeployed")
         .withArgs(addr1.address, anyValue);
     });
 
     it("Should allow deployer to set different initial owner", async function () {
-      const tx = await factory.connect(addr1).deployToken(
+      const tx = await factory.connect(addr2).deployToken(
         "Different Owner NFT",
         "DONFT",
-        "https://api.example.com/",
-        addr2.address
+        "https://api.example.com/"
       );
 
       const receipt = await tx.wait();
@@ -285,8 +273,7 @@ describe("BaseERC721Factory", function () {
       const tx = await factory.deployToken(
         "",
         "",
-        "https://api.example.com/",
-        owner.address
+        "https://api.example.com/"
       );
 
       const receipt = await tx.wait();
@@ -311,8 +298,7 @@ describe("BaseERC721Factory", function () {
       const tx = await factory.deployToken(
         longName,
         longSymbol,
-        "https://api.example.com/",
-        owner.address
+        "https://api.example.com/"
       );
 
       const receipt = await tx.wait();
@@ -336,8 +322,7 @@ describe("BaseERC721Factory", function () {
       const tx = await factory.deployToken(
         "Long URI NFT",
         "LUN",
-        longURI,
-        owner.address
+        longURI
       );
 
       const receipt = await tx.wait();
@@ -364,8 +349,7 @@ describe("BaseERC721Factory", function () {
       const tx = await factory.deployToken(
         "Test NFT",
         "TNFT",
-        "https://api.example.com/metadata/",
-        owner.address
+        "https://api.example.com/metadata/"
       );
 
       const receipt = await tx.wait();
@@ -410,8 +394,7 @@ describe("BaseERC721Factory", function () {
         const tx = await factory.deployToken(
           `NFT ${i}`,
           `NFT${i}`,
-          `https://api.example.com/nft${i}/`,
-          owner.address
+          `https://api.example.com/nft${i}/`
         );
 
         const receipt = await tx.wait();
@@ -436,22 +419,19 @@ describe("BaseERC721Factory", function () {
       const token1 = await factory.connect(owner).deployToken(
         "Owner NFT",
         "ONFT",
-        "https://api.example.com/owner/",
-        owner.address
+        "https://api.example.com/owner/"
       );
 
       const token2 = await factory.connect(addr1).deployToken(
         "Addr1 NFT",
         "A1NFT",
-        "https://api.example.com/addr1/",
-        addr1.address
+        "https://api.example.com/addr1/"
       );
 
       const token3 = await factory.connect(addr2).deployToken(
         "Addr2 NFT",
         "A2NFT",
-        "https://api.example.com/addr2/",
-        addr2.address
+        "https://api.example.com/addr2/"
       );
 
       expect(token1).to.not.equal(token2);
@@ -465,8 +445,7 @@ describe("BaseERC721Factory", function () {
       const tx = await factory.deployToken(
         "Gas Test NFT",
         "GTNFT",
-        "https://api.example.com/",
-        owner.address
+        "https://api.example.com/"
       );
 
       const receipt = await tx.wait();
@@ -480,8 +459,7 @@ describe("BaseERC721Factory", function () {
         const tx = await factory.deployToken(
           `Consistent NFT ${i}`,
           `CNFT${i}`,
-          "https://api.example.com/",
-          owner.address
+          "https://api.example.com/"
         );
 
         const receipt = await tx.wait();
@@ -501,8 +479,7 @@ describe("BaseERC721Factory", function () {
       const tx = await factory.deployToken(
         "Event Test NFT",
         "ETNFT",
-        "https://api.example.com/",
-        addr1.address
+        "https://api.example.com/"
       );
 
       const receipt = await tx.wait();
@@ -521,8 +498,7 @@ describe("BaseERC721Factory", function () {
         const tx = await factory.deployToken(
           `Event NFT ${i}`,
           `ENFT${i}`,
-          "https://api.example.com/",
-          owner.address
+          "https://api.example.com/"
         );
 
         const receipt = await tx.wait();
