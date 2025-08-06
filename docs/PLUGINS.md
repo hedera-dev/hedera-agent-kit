@@ -198,9 +198,9 @@ To create a plugin to be use with the Hedera Agent Kit, you will need to create 
 
 Once you have a repository, published npm package, and a README with a description of the functionality included in that plugin in your plugin's repo, as well as the required and optional parameters, you can add it to the Hedera Agent Kit by forking and opening a Pull Request to:
 
-1. Include the plugin as a bullet point under the "Available Third Party Plugins" section on this page. Include the name, a beirf description, and a link to the repository with the README, as well the URL linked to the published npm package.
+1. Include the plugin as a bullet point under the **Available Third Party Plugin** section _on this page_. Include the name, a beirf description, and a link to the repository with the README, as well the URL linked to the published npm package.
 
-2. Include the same information in the README.md of this repository under the **Third Party Plugins* section.
+2. Include the same information **in the README.md of this repository** under the **Third Party Plugins** section.
 
 Feel free to also reach out to the Hedera Agent Kit maintainers on Discord or another channel so we can test out your plugin, include it in our docs, and let our community know thorough marketing and community channels.
 
@@ -238,6 +238,10 @@ import { <plugin-name> } from 'hedera-agent-kit';
 
 ### Functionality
 Describe the different tools or individual pieces of functionality included in this plugin, and how to use them.
+
+
+**Plugin Name**
+_High level description of the plugin_
 
 | Tool Name                                       | Description                                        |Usage                                             |
 | ----------------------------------------------- | -------------------------------------------------- |--------------------------------------------------------- |
