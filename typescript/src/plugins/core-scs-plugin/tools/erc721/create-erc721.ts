@@ -32,7 +32,7 @@ const getERC721Address = async (client: Client, executeStrategyResult: ExecuteSt
   const record = await new TransactionRecordQuery()
     .setTransactionId(executeStrategyResult.transactionId)
     .execute(client);
-  return record.contractFunctionResult?.getAddress(0);
+  return '0x' + record.contractFunctionResult?.getAddress(0);
 };
 
 const createERC721 = async (
