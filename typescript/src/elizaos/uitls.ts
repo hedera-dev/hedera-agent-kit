@@ -71,7 +71,7 @@ function exampleForType(val: any): string | boolean | number {
     case 'ZodString': return `"string"`;
     case 'ZodNumber': return 123;
     case 'ZodBoolean': return true;
-    case 'ZodEnum': return `"${val._def.values[0]}"`; // pick the first enum value as example
+    case 'ZodEnum': return `"${val._def.values[0]}"`; // pick the first enum value as an example
     default: return `"value"`;
   }
 }
@@ -106,9 +106,9 @@ function hasDefProperty(obj: any): obj is ZodTypeWithDef {
   return obj && typeof obj === 'object' && '_def' in obj;
 }
 
-// Helper function to extract numeric field names from a schema
+// Helper function to extract numeric fields from a schema
 function extractNumericFields(schema: any): string[] {
-  // Default to empty array if we can't determine fields
+  // Default to an empty array if we can't determine fields
   if (!schema || typeof schema !== 'object') return [];
 
   // For direct object schemas
@@ -143,26 +143,65 @@ function extractNumericFields(schema: any): string[] {
   return [];
 }
 
+// Helper function to extract boolean fields from a schema
+function extractBooleanFields(schema: any): string[] {
+  // Default to an empty array if we can't determine fields
+  if (!schema || typeof schema !== 'object') return [];
+
+  // For direct object schemas
+  if (schema instanceof z.ZodObject && schema.shape) {
+    const booleanFields: string[] = [];
+
+    for (const [field, fieldSchema] of Object.entries(schema.shape)) {
+      if (!fieldSchema) continue;
+
+      // Handle direct ZodBoolean
+      if (fieldSchema instanceof z.ZodBoolean) {
+        booleanFields.push(field);
+        continue;
+      }
+
+      // Handle wrapped ZodBoolean (optional, default, etc.)
+      if (hasDefProperty(fieldSchema) && fieldSchema._def && fieldSchema._def.innerType) {
+        let innerType: any = fieldSchema._def.innerType;
+        // Go through nested wrappers if needed
+        while (hasDefProperty(innerType) && innerType._def && innerType._def.innerType) {
+          innerType = innerType._def.innerType;
+        }
+        if (innerType instanceof z.ZodBoolean) {
+          booleanFields.push(field);
+        }
+      }
+    }
+
+    return booleanFields;
+  }
+
+  return [];
+}
+
 export const universalFixParsedParams = (parsedParams: Record<string, any>, zodSchema: any): Record<string, any> => {
   if (!parsedParams || typeof parsedParams !== 'object') return parsedParams;
 
-  // If we can't determine the schema or it's not a valid Zod object, fall back to the default behavior
+  // If we can't determine the schema, or it's not a valid Zod object, fall back to the default behavior
   if (!zodSchema) {
     return fixParsedParams(parsedParams);
   }
 
   try {
-    // Get numeric fields from the schema
+    // Get numeric and boolean fields from the schema
     const numericFields = extractNumericFields(zodSchema);
+    const booleanFields = extractBooleanFields(zodSchema);
 
-    // If we couldn't determine numeric fields, fall back to default behavior
-    if (numericFields.length === 0) {
+    // If we couldn't determine any fields to fix, fall back to default behavior
+    if (numericFields.length === 0 && booleanFields.length === 0) {
       return fixParsedParams(parsedParams);
     }
 
     // Fix the parsed parameters
     const fixed: Record<string, any> = {...parsedParams};
 
+    // Fix numeric fields
     for (const field of numericFields) {
       const value = fixed[field];
       const coerced = Number(value);
@@ -171,10 +210,27 @@ export const universalFixParsedParams = (parsedParams: Record<string, any>, zodS
       }
     }
 
+    // Fix boolean fields
+    for (const field of booleanFields) {
+      const value = fixed[field];
+      if (value !== undefined) {
+        if (typeof value === 'string') {
+          const lowercased = value.toLowerCase();
+          if (lowercased === 'true' || lowercased === 'yes' || lowercased === '1') {
+            fixed[field] = true;
+          } else if (lowercased === 'false' || lowercased === 'no' || lowercased === '0') {
+            fixed[field] = false;
+          }
+        } else if (typeof value === 'number') {
+          fixed[field] = value !== 0;
+        }
+      }
+    }
+
     return fixed;
   } catch (error) {
     // If any error occurs during schema analysis, fall back to the default behavior
-    console.warn('Error analyzing schema for numeric fields:', error);
+    console.warn('Error analyzing schema for fields:', error);
     return fixParsedParams(parsedParams);
   }
 };
