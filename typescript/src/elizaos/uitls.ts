@@ -76,8 +76,6 @@ function exampleForType(val: any): string | boolean | number {
   }
 }
 
-
-
 export const fixParsedParams = (parsedParams: Record<string, any>) => {
   if (!parsedParams || typeof parsedParams !== 'object') return parsedParams;
 

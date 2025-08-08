@@ -1,1 +1,1 @@
-export { createTokenActions } from './adapter';
+export { ElizaOSAdapter } from './adapter';
