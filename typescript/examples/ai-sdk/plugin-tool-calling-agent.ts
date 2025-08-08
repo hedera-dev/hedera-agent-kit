@@ -12,7 +12,6 @@ async function bootstrap(): Promise<void> {
     process.env.ACCOUNT_ID!,
     PrivateKey.fromStringECDSA(process.env.PRIVATE_KEY!),
   );
-
   // Prepare Hedera toolkit with core tools AND custom plugin
   const hederaAgentToolkit = new HederaAIToolkit({
     client,
