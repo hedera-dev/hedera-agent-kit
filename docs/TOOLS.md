@@ -17,6 +17,7 @@ These tools provided by the toolkit enable you to execute basic transacitons on 
 | `create-fungible-token`| Creates a new Hedera fungible token| Provide the name of the token, and the symbol. Optionally, and initial supply amount for the token, and if it is a treasury account, the treasury account ID. |
 | `create-non-fungible-token`| Create NFTs on the Hedera network | Requires a name and symbol for the NFT, and can include a max supply limit and treasury account ID. |
 | `airdrop-fungible-token`| Airdrop fungible token(s) to a specific account | Provide the token ID to airdrop, amount of tokens, and recipient account ID. Can inslude a source account and memo.|
+| `create-erc721-token`| Creates an ERC721 token on Hedera using the BaseERC721Factory contract | Provide the token name and symbol. Optionally, specify baseURI for metadata. |
 <!-- | `transfer_fungible_token`| Transfer Fungible tokens between accounts on Hedera | Provide the token ID to transfter, amount, and recipient account ID. You can also add the source account ID and a memo | -->
 <!-- | `tool-name`| Description of what Tool Does | How to use| -->
 
