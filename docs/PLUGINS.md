@@ -60,10 +60,8 @@ The tools are now organized into plugins, each containing a set functionality re
 
 ```typescript
   import { z } from 'zod';
-  import type { Context } from '@/shared/configuration';
-  import type { Tool } from '@/shared/tools';
+  import { Context, Tool, handleTransaction } from 'hedera-agent-kit';
   import { Client } from '@hashgraph/sdk';
-  import { handleTransaction } from '@/shared/strategies/tx-mode-strategy';
 
   // Define parameter schema
   const myToolParameters = (context: Context = {}) =>
