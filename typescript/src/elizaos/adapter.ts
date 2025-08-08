@@ -81,7 +81,7 @@ export class ElizaOSAdapter {
 
         try {
           const result = await tool.execute(this.client, this.context, validation.data);
-          const responseText = await generateResponse(result, 'CREATE_FUNGIBLE_TOKEN_TOOL', runtime);
+          const responseText = await generateResponse(result, tool.name, runtime);
 
           if (callback) {
             callback({
