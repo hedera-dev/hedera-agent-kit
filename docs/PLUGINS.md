@@ -61,7 +61,11 @@ The tools are now organized into plugins, each containing a set functionality re
 ```typescript
   import { z } from 'zod';
   import { Context, Tool, handleTransaction } from 'hedera-agent-kit';
-  import { Client } from '@hashgraph/sdk';
+  import { Client, PrivateKey, AccountId } from '@hashgraph/sdk';
+  import dotenv from 'dotenv';
+  
+  // Load environment variables
+  dotenv.config();
 
   // Define parameter schema
   const myToolParameters = (context: Context = {}) =>
