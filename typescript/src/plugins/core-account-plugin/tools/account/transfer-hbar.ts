@@ -22,10 +22,11 @@ ${contextSnippet}
 This tool will transfer HBAR to an account.
 
 Parameters:
-- hbarAmount (number, required): Amount of HBAR to transfer
-- destinationAccountId (str, required): Account to transfer HBAR to
+- transfers (array of objects, required): List of HBAR transfers. Each object should contain:
+  - accountId (string): Recipient account ID
+  - amount (number): Amount of HBAR to transfer
 - ${sourceAccountDesc}
-- transactionMemo (str, optional): Optional memo for the transaction
+- transactionMemo (string, optional): Optional memo for the transaction
 ${usageInstructions}
 `;
 };
