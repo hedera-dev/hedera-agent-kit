@@ -21,7 +21,7 @@ This tool creates an ERC721 token on Hedera by calling the BaseERC721Factory con
 Parameters:
 - tokenName (str, required): The name of the token
 - tokenSymbol (str, required): The symbol of the token
-- baseURI (str, optional): The base URI for token metadata. Defaults to empty string
+- baseURI (str, required): The base URI for token metadata.
 ${usageInstructions}
 
 The contractId returned by the tool is the address of the ERC721 Factory contract, the address of the ERC721 token is the erc721Address returned by the tool.
