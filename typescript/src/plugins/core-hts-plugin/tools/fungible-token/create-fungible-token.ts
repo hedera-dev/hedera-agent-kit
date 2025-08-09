@@ -3,7 +3,7 @@ import type { Context } from '@/shared/configuration';
 import type { Tool } from '@/shared/tools';
 import HederaParameterNormaliser from '@/shared/hedera-utils/hedera-parameter-normaliser';
 import { Client } from '@hashgraph/sdk';
-import { handleTransaction } from '@/shared/strategies/tx-mode-strategy';
+import { handleTransaction, RawTransactionResponse } from '@/shared/strategies/tx-mode-strategy';
 import { createFungibleTokenParameters } from '@/shared/parameter-schemas/hts.zod';
 import HederaBuilder from '@/shared/hedera-utils/hedera-builder';
 import { getMirrornodeService } from '@/shared/hedera-utils/mirrornode/hedera-mirrornode-utils';
@@ -35,6 +35,10 @@ ${usageInstructions}
 `;
 };
 
+const postProcess = (response: RawTransactionResponse) => {
+  return `Token created successfully at address ${response.tokenId?.toString()} with transaction id ${response.transactionId}`;
+};
+
 const createFungibleToken = async (
   client: Client,
   context: Context,
@@ -49,7 +53,7 @@ const createFungibleToken = async (
       mirrornodeService,
     );
     const tx = HederaBuilder.createFungibleToken(normalisedParams);
-    const result = await handleTransaction(tx, client, context);
+    const result = await handleTransaction(tx, client, context, postProcess);
     return result;
   } catch (error) {
     console.error('[CreateFungibleToken] Error creating fungible token:', error);

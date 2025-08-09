@@ -2,30 +2,51 @@ import { AccountId, Client, TokenId, TopicId, Transaction, TransactionId } from 
 import { AgentMode, Context } from '@/shared/configuration';
 
 interface TxModeStrategy {
-  handle<T extends Transaction>(tx: T, client: Client, context: Context): Promise<unknown>;
+  handle<T extends Transaction>(
+    tx: T,
+    client: Client,
+    context: Context,
+    postProcess?: (response: RawTransactionResponse) => unknown,
+  ): Promise<unknown>;
+}
+
+export interface RawTransactionResponse {
+  status: number;
+  accountId: AccountId | null;
+  tokenId: TokenId | null;
+  transactionId: string;
+  topicId: TopicId | null;
 }
 
 export interface ExecuteStrategyResult {
-  status: number;
-  accountId: AccountId;
-  tokenId: TokenId;
-  transactionId: string;
-  topicId: TopicId;
+  raw: RawTransactionResponse;
+  humanMessage: string;
 }
 
 class ExecuteStrategy implements TxModeStrategy {
-  async handle(tx: Transaction, client: Client) {
+  defaultPostProcess(response: RawTransactionResponse): string {
+    return JSON.stringify(response, null, 2);
+  }
+
+  async handle(
+    tx: Transaction,
+    client: Client,
+    context: Context,
+    postProcess: (response: RawTransactionResponse) => string = this.defaultPostProcess,
+  ) {
     const submit = await tx.execute(client);
     const receipt = await submit.getReceipt(client);
-    return {
+    const rawTransactionResponse: RawTransactionResponse = {
       status: receipt.status._code,
       accountId: receipt.accountId,
       tokenId: receipt.tokenId,
-      transactionId: tx.transactionId?.toString(),
+      transactionId: tx.transactionId?.toString() ?? '',
       topicId: receipt.topicId,
-      contractId: receipt.contractId,
-      receipt: receipt,
-    } as ExecuteStrategyResult;
+    };
+    return {
+      raw: rawTransactionResponse,
+      humanMessage: postProcess(rawTransactionResponse),
+    };
   }
 }
 
@@ -47,7 +68,12 @@ const getStrategyFromContext = (context: Context) => {
   return new ExecuteStrategy();
 };
 
-export const handleTransaction = async (tx: Transaction, client: Client, context: Context) => {
+export const handleTransaction = async (
+  tx: Transaction,
+  client: Client,
+  context: Context,
+  postProcess?: (response: RawTransactionResponse) => string,
+) => {
   const strategy = getStrategyFromContext(context);
-  return await strategy.handle(tx, client, context);
+  return await strategy.handle(tx, client, context, postProcess);
 };
