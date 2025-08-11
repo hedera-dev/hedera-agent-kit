@@ -168,7 +168,7 @@ The tools are now organized into plugins, each containing a set functionality re
 
 **Transaction Handling**
 
-  * Use handleTransaction() for consistent transaction processing
+  * Use handleTransaction() to facilitate human-in-the-loop and autonomous execution flows
   * Respect the AgentMode (AUTONOMOUS vs RETURN_BYTES)
   * Implement proper transaction building patterns
 
