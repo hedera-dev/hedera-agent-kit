@@ -391,7 +391,6 @@ export default class HederaParameterNormaliser {
     );
     const iface = new ethers.Interface(factoryContractAbi);
     const encodedData = iface.encodeFunctionData(factoryContractFunctionName, [toAddress]);
-
     const functionParameters = ethers.getBytes(encodedData);
 
     return {
