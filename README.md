@@ -440,7 +440,6 @@ Currently, the following plugins are available:
 * Create a Fungible Token
 * Create a Non-Fungible Token
 * Airdrop Fungible Tokens
-* Transfer Fungible Tokens
 
 #### Core Queries Plugin: Tools for querying Hedera network data
 * Get Account Query
