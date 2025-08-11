@@ -223,7 +223,7 @@ npm install <plugin-name>
 ### Usage
 
 ```javascript
-import { <plugin-name> } from 'hedera-agent-kit';
+import { myPlugin } from '<plugin-name>';
 ```
 
 ```javascript
