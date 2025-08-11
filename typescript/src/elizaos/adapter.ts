@@ -6,13 +6,17 @@ import {
   type State,
   ModelType,
   composePromptFromState,
-  parseJSONObjectFromText,
-  logger, ActionResult,
+  logger,
+  ActionResult,
 } from '@elizaos/core';
 import { Client } from '@hashgraph/sdk';
 import type { Tool } from '@/shared/tools';
 import { Context } from '@/shared/configuration';
-import { generateExtractionTemplate, generateResponse, universalFixParsedParams } from '@/elizaos/uitls';
+import {
+  generateExtractionTemplate,
+} from '@/elizaos/utils/extraction';
+import { customParseJSONObjectFromText } from '@/elizaos/utils/parser';
+import { generateResponse } from '@/elizaos/utils/summariser';
 
 export class ElizaOSAdapter {
   private readonly client: Client;
@@ -45,7 +49,7 @@ export class ElizaOSAdapter {
         _message: Memory,
         state: State | undefined,
         _options: any,
-        callback?: HandlerCallback
+        callback?: HandlerCallback,
       ): Promise<ActionResult> => {
         logger.log(`Running ${tool.method} handler...`);
         if (!state) {
@@ -57,18 +61,14 @@ export class ElizaOSAdapter {
           template: generateExtractionTemplate(tool),
         });
 
-
         const modelOutput = await runtime.useModel(ModelType.TEXT_LARGE, {prompt});
-        console.log(`modelOutput: ${modelOutput}`);
+        console.debug(`modelOutput: ${modelOutput}`);
 
-        const parsedParams = parseJSONObjectFromText(modelOutput) as Record<string, any>;
-        console.log('parsedParams (raw)', parsedParams);
+        const parsedParams = customParseJSONObjectFromText(modelOutput) as Record<string, any>;
+        console.debug('parsedParams (raw)', parsedParams);
 
-        const fixedParsedParams = universalFixParsedParams(parsedParams, parameterSchema);
-        console.log('FIXED parsedParams', JSON.stringify(fixedParsedParams, null, 2));
-
-        const validation = parameterSchema.safeParse(fixedParsedParams); // parsing extracted params before calling a tool
-        console.log('validation:' + JSON.stringify(validation, null, 2));
+        const validation = parameterSchema.safeParse(parsedParams); // parsing extracted params before calling a tool
+        console.log('validated input:' + JSON.stringify(validation, null, 2));
 
         if (!validation.success) {
           if (callback) {
@@ -77,6 +77,11 @@ export class ElizaOSAdapter {
               content: { error: validation.error.format() },
             });
           }
+          return {
+            success: false,
+            text: 'Invalid or incomplete parameters.',
+            error: validation.error.toString(),
+          };
         }
 
         try {
@@ -90,7 +95,7 @@ export class ElizaOSAdapter {
             });
           }
 
-          return {success: true, text: responseText};
+          return { success: true, text: responseText };
         } catch (err) {
           const message = err instanceof Error ? err.message : 'Unknown error';
           logger.error(`Error running tool ${tool.method}:`, err);
@@ -102,9 +107,9 @@ export class ElizaOSAdapter {
             });
           }
 
-          return { success: false, text: `Execution failed: ${message}`, error: message};
+          return { success: false, text: `Execution failed: ${message}`, error: message };
         }
-      }
+      },
     };
   }
 }
