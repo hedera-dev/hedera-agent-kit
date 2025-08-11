@@ -13,6 +13,8 @@ The tools are now organized into plugins, each containing related functionality:
 - **Core HTS Plugin**: Tools for Hedera Token Service operations
 - **Core Queries Plugin**: Tools for querying Hedera network data
 
+See [an example of how to create a plugin](../typescript/examples/plugin/example-plugin.ts) as well as how they can be used to build with using [Langchain](../typescript/examples/langchain/plugin-tool-calling-agent.ts) or using the [Vercel AI SDK](../typescript/examples/ai-sdk/plugin-tool-calling-agent.ts)
+
 Plugins can be found in [typescript/src/plugins](../typescript/src/plugins)
  
 
