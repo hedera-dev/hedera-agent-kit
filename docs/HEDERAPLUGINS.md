@@ -62,7 +62,7 @@ Take a look at the example [tool-calling-agent.ts](../typescript/examples/langch
 
 First, you will need to import the core plugins, which contain all the tools you may want to use such as `coreAccountPlugin`.
 
-You will also need to import the constants for each tool name, such as `coreAccountPluginToolNames`, which will enables you to pass specific tools to the configuration object.
+You also have the option to pick and choose which tools from a Hedera plugin you want to enable. If you choose to do this, only the tools specified will be usable. You will need to import the constants for each tool name, such as `coreAccountPluginToolNames`, which will enables you to pass specific tools to the configuration object.
 
 `AgentMode` , `Configuration`, and `Context` are also required to be imported to configure the plugins.
 

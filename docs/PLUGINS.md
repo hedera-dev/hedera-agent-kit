@@ -248,5 +248,4 @@ _High level description of the plugin_
 | Tool Name                                       | Description                                        |Usage                                             |
 | ----------------------------------------------- | -------------------------------------------------- |--------------------------------------------------------- |
 | `YOUR_PLUGIN_TOOL_NAME`| What it does | How to use. Include a list of parameters and their descriptions|
-| `YOUR_PLUGIN_TOOL_NAME`| What it does | How to use. Include a list of parameters and their descriptions|
 ```
