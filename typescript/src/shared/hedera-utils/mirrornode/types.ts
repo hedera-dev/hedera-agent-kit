@@ -41,15 +41,17 @@ export type AccountResponse = {
   accountId: string;
   accountPublicKey: string;
   balance: AccountBalanceResponse;
+  evmAddress: string;
 };
 
 export type AccountAPIResponse = {
-  accountId: string;
+  account: string;
   key: {
     key: string;
     _type: KeyEncryptionType;
   };
   balance: AccountBalanceResponse;
+  evm_address: string;
 };
 
 export type AccountBalanceResponse = {
