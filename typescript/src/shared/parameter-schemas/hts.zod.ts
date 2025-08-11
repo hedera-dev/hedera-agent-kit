@@ -73,7 +73,6 @@ const AirdropRecipientSchema = z.object({
 export const airdropFungibleTokenParameters = (_context: Context = {}) =>
   z.object({
     tokenId: z.string().describe('The id of the token.'),
-    amount: z.number().describe('The amount of tokens to airdrop.'),
     sourceAccountId: z.string().optional().describe('The account to airdrop the token from.'),
     recipients: z
       .array(AirdropRecipientSchema)

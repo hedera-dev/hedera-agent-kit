@@ -5,6 +5,7 @@ import { getMirrornodeService } from '@/shared/hedera-utils/mirrornode/hedera-mi
 import { accountQueryParameters } from '@/shared/parameter-schemas/account-query.zod';
 import { Tool } from '@/shared/tools';
 import { PromptGenerator } from '@/shared/utils/prompt-generator';
+import { AccountResponse } from '@/shared/hedera-utils/mirrornode/types';
 
 export const getAccountQueryPrompt = (context: Context = {}) => {
   const contextSnippet = PromptGenerator.getContextSnippet(context);
@@ -21,6 +22,13 @@ ${usageInstructions}
 `;
 };
 
+const postProcess = (account: AccountResponse) => {
+  return `Details for ${account.accountId}
+Balance: ${account.balance.balance.toString()}
+Public Key: ${account.accountPublicKey}
+`;
+};
+
 export const getAccountQuery = async (
   client: Client,
   context: Context,
@@ -29,7 +37,10 @@ export const getAccountQuery = async (
   try {
     const mirrornodeService = getMirrornodeService(context.mirrornodeService!, client.ledgerId!);
     const account = await mirrornodeService.getAccount(params.accountId);
-    return { accountId: params.accountId, account: account };
+    return {
+      raw: { accountId: params.accountId, account: account },
+      humanMessage: postProcess(account),
+    };
   } catch (error) {
     console.error('Error getting account query', error);
     if (error instanceof Error) {

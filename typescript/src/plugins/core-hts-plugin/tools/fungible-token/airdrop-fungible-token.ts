@@ -3,7 +3,7 @@ import type { Context } from '@/shared/configuration';
 import type { Tool } from '@/shared/tools';
 import HederaParameterNormaliser from '@/shared/hedera-utils/hedera-parameter-normaliser';
 import { Client } from '@hashgraph/sdk';
-import { handleTransaction } from '@/shared/strategies/tx-mode-strategy';
+import { handleTransaction, RawTransactionResponse } from '@/shared/strategies/tx-mode-strategy';
 import { airdropFungibleTokenParameters } from '@/shared/parameter-schemas/hts.zod';
 import HederaBuilder from '@/shared/hedera-utils/hedera-builder';
 import { getMirrornodeService } from '@/shared/hedera-utils/mirrornode/hedera-mirrornode-utils';
@@ -33,6 +33,10 @@ ${usageInstructions}
 `;
 };
 
+const postProcess = (response: RawTransactionResponse) => {
+  return `Token ${response.tokenId?.toString()} successfully airdropped with transaction id ${response.transactionId.toString()}`;
+};
+
 const airdropFungibleToken = async (
   client: Client,
   context: Context,
@@ -47,7 +51,7 @@ const airdropFungibleToken = async (
       mirrornodeService,
     );
     const tx = HederaBuilder.airdropFungibleToken(normalisedParams);
-    const result = await handleTransaction(tx, client, context);
+    const result = await handleTransaction(tx, client, context, postProcess);
     return result;
   } catch (error) {
     if (error instanceof Error) {

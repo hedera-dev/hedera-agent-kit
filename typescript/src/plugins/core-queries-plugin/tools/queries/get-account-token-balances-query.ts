@@ -6,6 +6,7 @@ import { Client } from '@hashgraph/sdk';
 import { Tool } from '@/shared/tools';
 import HederaParameterNormaliser from '@/shared/hedera-utils/hedera-parameter-normaliser';
 import { PromptGenerator } from '@/shared/utils/prompt-generator';
+import { TokenBalancesResponse } from '@/shared/hedera-utils/mirrornode/types';
 
 export const getAccountTokenBalancesQueryPrompt = (context: Context = {}) => {
   const contextSnippet = PromptGenerator.getContextSnippet(context);
@@ -24,6 +25,18 @@ ${usageInstructions}
 `;
 };
 
+const postProcess = (tokenBalances: TokenBalancesResponse, accountId: string) => {
+  const balancesText = tokenBalances.tokens
+    .map(
+      token => `  Token: ${token.account}, Balance: ${token.balance}, Decimals: ${token.decimals}`,
+    )
+    .join('\n');
+
+  return `Details for ${accountId}
+--- Token Balances ---
+${balancesText}`;
+};
+
 export const getAccountTokenBalancesQuery = async (
   client: Client,
   context: Context,
@@ -40,7 +53,10 @@ export const getAccountTokenBalancesQuery = async (
       normalisedParams.accountId,
       normalisedParams.tokenId,
     );
-    return { accountId: normalisedParams.accountId, tokenBalances: tokenBalances };
+    return {
+      raw: { accountId: params.accountId, tokenBalances: tokenBalances },
+      humanMessage: postProcess(tokenBalances, params.accountId?.toString() as string),
+    };
   } catch (error) {
     console.error('Error getting account token balances', error);
     if (error instanceof Error) {

@@ -3,7 +3,7 @@ import type { Context } from '@/shared/configuration';
 import type { Tool } from '@/shared/tools';
 import HederaParameterNormaliser from '@/shared/hedera-utils/hedera-parameter-normaliser';
 import { Client } from '@hashgraph/sdk';
-import { handleTransaction } from '@/shared/strategies/tx-mode-strategy';
+import { handleTransaction, RawTransactionResponse } from '@/shared/strategies/tx-mode-strategy';
 import { mintFungibleTokenParameters } from '@/shared/parameter-schemas/hts.zod';
 import HederaBuilder from '@/shared/hedera-utils/hedera-builder';
 import { getMirrornodeService } from '@/shared/hedera-utils/mirrornode/hedera-mirrornode-utils';
@@ -27,6 +27,10 @@ Example: "Mint 1 of 0.0.6458037" means minting the amount of 1 of the token with
 `;
 };
 
+const postProcess = (response: RawTransactionResponse) => {
+  return `Token ${response.tokenId?.toString()} successfully minted with transaction id ${response.transactionId.toString()}`;
+};
+
 const mintFungibleToken = async (
   client: Client,
   context: Context,
@@ -40,7 +44,7 @@ const mintFungibleToken = async (
       mirrornodeService,
     );
     const tx = HederaBuilder.mintFungibleToken(normalisedParams);
-    const result = await handleTransaction(tx, client, context);
+    const result = await handleTransaction(tx, client, context, postProcess);
     return result;
   } catch (error) {
     if (error instanceof Error) {
