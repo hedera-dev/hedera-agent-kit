@@ -233,7 +233,7 @@ import { myPlugin } from '<plugin-name>';
       context: {
         mode: AgentMode.AUTONOMOUS,
       },
-      plugins: [coreHTSPlugin, coreAccountPlugin, coreConsensusPlugin, coreQueriesPlugin, <plugin-name>],
+      plugins: [coreHTSPlugin, coreAccountPlugin, coreConsensusPlugin, coreQueriesPlugin, myPlugin],
     },
   });
 ```
