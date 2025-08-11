@@ -56,7 +56,7 @@ npm init -y
 npm install hedera-agent-kit @langchain/openai @langchain/core langchain @hashgraph/sdk dotenv
 ```
 
-> You may need to add in the "type":"module" to your package.json file after `"scripts"` in order tospecify that the project is using ES modules
+> You may need to add "type": "module" to your package.json file so that your project allows ES module imports
 
 ```json
 "name": "hello-hedera-agent-kit",

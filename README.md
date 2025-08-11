@@ -425,7 +425,7 @@ This tool has two execution modes with AI agents;  autonomous excution and retur
  * `mode: AgentMode.AUTONOMOUS` the transaction will be executed autonomously, using the accountID set (the operator account can be set in the client with `.setOperator(process.env.ACCOUNT_ID!`)
 
 ### Hedera Plugins & Tools
-The Hedera Agent Kit provides a set of tools, bundled into plugins, to execute transactions on the Hedera network, which we will be expanding in the future. 
+The Hedera Agent Kit provides a set of tools, bundled into plugins, to interact with the Hedera network. 
 
 Currently, the following plugins are available:
 
@@ -440,7 +440,6 @@ Currently, the following plugins are available:
 * Create a Fungible Token
 * Create a Non-Fungible Token
 * Airdrop Fungible Tokens
-* Transfer Fungible Tokens
 
 #### Core Queries Plugin: Tools for querying Hedera network data
 * Get Account Query

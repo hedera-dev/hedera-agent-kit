@@ -168,7 +168,7 @@ The tools are now organized into plugins, each containing a set functionality re
 
 **Transaction Handling**
 
-  * Use handleTransaction() for consistent transaction processing
+  * Use handleTransaction() to facilitate human-in-the-loop and autonomous execution flows
   * Respect the AgentMode (AUTONOMOUS vs RETURN_BYTES)
   * Implement proper transaction building patterns
 
@@ -200,7 +200,7 @@ To create a plugin to be use with the Hedera Agent Kit, you will need to create 
 
 Once you have a repository, published npm package, and a README with a description of the functionality included in that plugin in your plugin's repo, as well as the required and optional parameters, you can add it to the Hedera Agent Kit by forking and opening a Pull Request to:
 
-1. Include the plugin as a bullet point under the **Available Third Party Plugin** section _on this page_. Include the name, a beirf description, and a link to the repository with the README, as well the URL linked to the published npm package.
+1. Include the plugin as a bullet point under the **Available Third Party Plugin** section _on this page_. Include the name, a brief description, and a link to the repository with the README, as well the URL linked to the published npm package.
 
 2. Include the same information **in the README.md of this repository** under the **Third Party Plugins** section.
 
@@ -225,7 +225,7 @@ npm install <plugin-name>
 ### Usage
 
 ```javascript
-import { <plugin-name> } from 'hedera-agent-kit';
+import { myPlugin } from '<plugin-name>';
 ```
 
 ```javascript
@@ -235,7 +235,7 @@ import { <plugin-name> } from 'hedera-agent-kit';
       context: {
         mode: AgentMode.AUTONOMOUS,
       },
-      plugins: [coreHTSPlugin, coreAccountPlugin, coreConsensusPlugin, coreQueriesPlugin, <plugin-name>],
+      plugins: [coreHTSPlugin, coreAccountPlugin, coreConsensusPlugin, coreQueriesPlugin, myPlugin],
     },
   });
 ```

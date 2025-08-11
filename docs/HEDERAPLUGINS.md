@@ -1,6 +1,6 @@
 # Available Tools
 
-The Hedera Agent Kit provides a comprehensive set of tools organized into **plugins** by the type of Hedera service they interact with. These tools can be used both by an agent like the ones in the typescript/examples folder, that enable a user to interact with Hedera services using natural language, and when you are building with the SDK.
+The Hedera Agent Kit provides a comprehensive set of tools organized into **plugins** by the type of Hedera service they interact with. These tools can be used by an AI agent, like the ones in the typescript/examples folder, and enable a user to interact with Hedera services using natural language.
 
 Want additional Hedera tools? [Open an issue](https://github.com/hedera-dev/hedera-agent-kit/issues/new?template=toolkit_feature_request.yml&labels=feature-request).
 
@@ -52,7 +52,7 @@ These tools provided by the toolkit enable you to complete (free) queries agains
 | ------------------------------ | ------------------------------------- | --------------------------------------------------- |
 | `GET_ACCOUNT_QUERY_TOOL`| Returns comprehensive account information for a given Hedera account | Provide an account ID to query |
 | `GET_HBAR_BALANCE_QUERY_TOOL`| Returns the HBAR balance for a given Hedera account | Requires a Hedera account ID to query (uses context operator account if not specified)|
-| ` GET_ACCOUNT_TOKEN_BALANCES_QUERY_TOOL`| Returns token balances for a Hedera acocunt | rovide the account ID to query (optional - uses context account if not provided). Optionally, provide a specific token ID to query|
+| `GET_ACCOUNT_TOKEN_BALANCES_QUERY_TOOL`| Returns token balances for a Hedera account | Provide the account ID to query (optional - uses context account if not provided). Optionally, provide a specific token ID to query|
 | `GET_TOPIC_MESSAGES_QUERY_TOOL`| Returns messages for a given Hedera Consensus Service (HCS) topic | Provide the topic ID to query (required). Optionally, provide start time, end time, and limit for message filtering|
 <!-- | `tool-name`| Description of what Tool Does | How to use| -->
 
