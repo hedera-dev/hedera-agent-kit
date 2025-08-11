@@ -48,7 +48,10 @@ const transferERC20 = async (
       mirrorNode,
     );
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2c21a7d (Improved ERC721 transfer to support both addresses)
     const tx = HederaBuilder.executeTransaction(normalisedParams);
     const result = await handleTransaction(tx, client, context);
     return result;

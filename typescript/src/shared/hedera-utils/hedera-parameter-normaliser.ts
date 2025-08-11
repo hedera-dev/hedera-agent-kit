@@ -32,7 +32,10 @@ import {
   createERC20Parameters,
   transferERC20Parameters,
   transferERC721Parameters,
+<<<<<<< HEAD
   mintERC721Parameters,
+=======
+>>>>>>> 2c21a7d (Improved ERC721 transfer to support both addresses)
 } from '@/shared/parameter-schemas/hscs.zod';
 
 export default class HederaParameterNormaliser {
