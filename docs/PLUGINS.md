@@ -204,7 +204,9 @@ Once you have a repository, published npm package, and a README with a descripti
 
 2. Include the same information **in the README.md of this repository** under the **Third Party Plugins** section.
 
-Feel free to also reach out to the Hedera Agent Kit maintainers on Discord or another channel so we can test out your plugin, include it in our docs, and let our community know thorough marketing and community channels.
+Feel free to also [reach out to the Hedera Agent Kit maintainers on Discord](https://hedera.com/discord) or another channel so we can test out your plugin, include it in our docs, and let our community know thorough marketing and community channels.
+
+Please also reach out in the Hedera Discord in the Support > developer-help-desk channelor create an Issue in this repository for help building, publishing, and promoting your plugin 
 
 ## Plugin README Template 
 
