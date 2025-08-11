@@ -11,14 +11,9 @@ export const coreSCSPlugin: Plugin = {
   version: '1.0.0',
   description: 'A plugin for the Hedera SCS Service',
   tools: (context: Context) => {
-    return [
-      createERC20Tool(context),
-      transferERC20Tool(context),
-      transferERC721Tool(context),
-    ];
+    return [createERC20Tool(context), transferERC20Tool(context), transferERC721Tool(context)];
   },
 };
-
 
 // Export tool names as an object for destructuring
 export const coreSCSPluginToolNames = {
