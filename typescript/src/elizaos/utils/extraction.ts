@@ -260,22 +260,49 @@ Always extract values **only from the last user message**. Do not infer or carry
 }
 
 function generateExampleJson(required: FieldInfo[], optional: FieldInfo[]): string {
-  const exampleObj: Record<string, any> = {};
-  const commented: string[] = [];
-  required.forEach(f => {
-    exampleObj[f.name] = TemplateFormatter.generateExampleValue(f);
-  });
-  optional.forEach(f => {
+  const formatValue = (f: FieldInfo) => {
     const ex = TemplateFormatter.generateExampleValue(f);
-    const serialized = typeof ex === 'string' ? `"${ex}"` : JSON.stringify(ex);
-    commented.push(`// "${f.name}": ${serialized}`);
-  });
-  let jsonString = JSON.stringify(exampleObj, null, 2);
-  if (commented.length > 0) {
-    jsonString = jsonString.replace(
-      /\n}$/,
-      ',\n// Optional fields only if present in input:\n' + commented.join(',\n') + '\n}'
-    );
+    return typeof ex === 'string' ? `"${ex}"` : JSON.stringify(ex);
+  };
+
+  const optionalComments = optional.map(
+    f => `// "${f.name}": ${formatValue(f)}`
+  );
+
+  let lines: string[] = [];
+
+  if (required.length > 0) {
+    // Start an object with required fields
+    lines.push('{');
+    required.forEach((f, i) => {
+      const comma = i < required.length - 1 || optional.length > 0 ? ',' : '';
+      lines.push(`  "${f.name}": ${formatValue(f)}${comma}`);
+    });
+
+    if (optional.length > 0) {
+      lines.push('  // Optional fields only if present in input:');
+      optionalComments.forEach((c, i) => {
+        const comma = i < optionalComments.length - 1 ? ',' : '';
+        lines.push(`  ${c}${comma}`);
+      });
+    }
+
+    lines.push('}');
+
+  } else if (optional.length > 0) {
+    // Only optional fields
+    lines.push('{');
+    lines.push('  // Optional fields only if present in input:');
+    optionalComments.forEach((c, i) => {
+      const comma = i < optionalComments.length - 1 ? ',' : '';
+      lines.push(`  ${c}${comma}`);
+    });
+    lines.push('}');
+
+  } else {
+    // No fields at all
+    lines.push('{}');
   }
-  return `\`\`\`json\n${jsonString}\n\`\`\``;
+
+  return `\`\`\`json\n${lines.join('\n')}\n\`\`\``;
 }
