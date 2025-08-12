@@ -35,12 +35,13 @@ class ZodTypeAnalyzer {
   static isOptional(val: any): boolean {
     // Detect before unwrapping to preserve optionality
     if (val?._def?.typeName === 'ZodOptional') return true;
-    if (typeof val.isOptional === 'function' && val.isOptional()) return true;
-    return false;
+    return !!(typeof val.isOptional === 'function' && val.isOptional());
+
   }
 
   static getTypeHint(readableType: string): string {
     const hints: Record<string, string> = {
+      string: ' (quoted string value)',
       number: ' (numeric value, not a string)',
       boolean: ' (true or false, not a string)',
       enum: ' (quoted string value)',
@@ -135,12 +136,14 @@ class FieldAnalyzer {
 
   private static analyzeLiteralField(baseInfo: any, val: any): FieldInfo {
     const value = val._def.value;
+    const type = typeof value === 'string' ? `"${value}"` : String(value);
     return {
       ...baseInfo,
-      type: typeof value === 'string' ? `"${value}"` : String(value),
-      typeHint: '',
+      type,
+      typeHint: typeof value === 'string' ? ' (quoted string value)' : '',
     };
   }
+
 
   private static analyzeBasicField(baseInfo: any, val: any): FieldInfo {
     const type = ZodTypeAnalyzer.getBaseTypeName(val);
@@ -235,17 +238,19 @@ function buildTemplate(title: string, required: FieldInfo[], optional: FieldInfo
   const exampleJson = generateExampleJson(required, optional);
   return `Given the recent messages and Hedera wallet information below:
 {{recentMessages}}
+{{hederaAccountDetails}}
 
 Extract the following parameters required to ${title}.
 
 ${requiredSection}${optionalSection}⚠️ Do **not** assume values or apply defaults. Do **not** set a field unless it is clearly specified in the latest user input.
 ⚠️ **IMPORTANT**: Always ensure numeric values are provided as NUMBERS WITHOUT QUOTES in the JSON response.
+⚠️ **IMPORTANT**: Always ensure string values are provided as QUOTED STRINGS in the JSON response.
 ⚠️ **CRITICAL**: Enum values must be provided as QUOTED STRINGS (e.g., "finite", not finite).
 
 ---
 
 ### Response format:
-Respond with a JSON markdown block that includes **only** the fields that were explicitly mentioned in the most recent user message.
+Respond with a JSON markdown block that includes the fields that were explicitly mentioned in the most recent user message.
 
 ${exampleJson}
 

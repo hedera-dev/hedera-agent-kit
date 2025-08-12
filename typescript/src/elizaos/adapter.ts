@@ -60,6 +60,7 @@ export class ElizaOSAdapter {
           state,
           template: generateExtractionTemplate(tool),
         });
+        console.log(`prompt: ${prompt}`);
 
         const modelOutput = await runtime.useModel(ModelType.TEXT_LARGE, {prompt});
         console.debug(`modelOutput: ${modelOutput}`);
