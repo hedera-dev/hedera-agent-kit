@@ -35,7 +35,6 @@ const mintERC721 = async (
   params: z.infer<ReturnType<typeof mintERC721Parameters>>,
 ) => {
   try {
-    console.log('mintERC721', JSON.stringify(params, null, 2));
     const mirrorNode = getMirrornodeService(context.mirrornodeService, client.ledgerId!);
 
     const normalisedParams = await HederaParameterNormaliser.normaliseMintERC721Params(
@@ -45,7 +44,6 @@ const mintERC721 = async (
       context,
       mirrorNode,
     );
-    console.log('normalisedParams', JSON.stringify(normalisedParams, null, 2));
     const tx = HederaBuilder.executeTransaction(normalisedParams);
     console.log('tx', JSON.stringify(tx, null, 2));
     const result = await handleTransaction(tx, client, context);
