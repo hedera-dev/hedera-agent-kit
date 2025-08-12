@@ -26,8 +26,11 @@ import { toBaseUnit } from '@/shared/hedera-utils/decimals-utils';
 import Long from 'long';
 import { TokenTransferMinimalParams, TransferHbarInput } from '@/shared/hedera-utils/types';
 import { AccountResolver } from '@/shared/utils/account-resolver';
-import { createERC20Parameters } from '../parameter-schemas/erc20.zod';
 import { ethers } from 'ethers';
+import {
+  createERC20Parameters,
+  transferERC20Parameters,
+} from '@/shared/parameter-schemas/hscs.zod';
 
 export default class HederaParameterNormaliser {
   static async normaliseCreateFungibleTokenParams(
@@ -301,5 +304,57 @@ export default class HederaParameterNormaliser {
       ...params,
       metadata: metadata,
     };
+  }
+
+  static async normaliseTransferERC20Params(
+    params: z.infer<ReturnType<typeof transferERC20Parameters>>,
+    factoryContractAbi: string[],
+    factoryContractFunctionName: string,
+    _context: Context,
+    mirrorNode: IHederaMirrornodeService,
+  ) {
+    const recipientAddress = await HederaParameterNormaliser.getHederaEVMAddress(
+      params.recipientAddress,
+      mirrorNode,
+    );
+    const contractId = await HederaParameterNormaliser.getHederaAccountId(
+      params.contractId,
+      mirrorNode,
+    );
+    const iface = new ethers.Interface(factoryContractAbi);
+    const encodedData = iface.encodeFunctionData(factoryContractFunctionName, [
+      recipientAddress,
+      params.amount,
+    ]);
+
+    const functionParameters = ethers.getBytes(encodedData);
+
+    return {
+      contractId,
+      functionParameters,
+      gas: 100_000,
+    };
+  }
+
+  static async getHederaEVMAddress(
+    address: string,
+    mirrorNode: IHederaMirrornodeService,
+  ): Promise<string> {
+    if (!AccountResolver.isHederaAddress(address)) {
+      return address;
+    }
+    const account = await mirrorNode.getAccount(address);
+    return account.evmAddress;
+  }
+
+  static async getHederaAccountId(
+    address: string,
+    mirrorNode: IHederaMirrornodeService,
+  ): Promise<string> {
+    if (AccountResolver.isHederaAddress(address)) {
+      return address;
+    }
+    const account = await mirrorNode.getAccount(address);
+    return account.accountId;
   }
 }

@@ -42,4 +42,8 @@ export class AccountResolver {
     }
     return 'operator account';
   }
+
+  static isHederaAddress(address: string): boolean {
+    return address.startsWith('0.') || address.startsWith('0.0.');
+  }
 }

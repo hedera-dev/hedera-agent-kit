@@ -28,9 +28,10 @@ export class HederaMirrornodeServiceDefaultImpl implements IHederaMirrornodeServ
     const response = await fetch(url);
     const data: AccountAPIResponse = await response.json();
     return {
-      accountId: data.accountId,
-      accountPublicKey: data.key.key,
+      accountId: data.account,
+      accountPublicKey: data?.key?.key,
       balance: data.balance,
+      evmAddress: data.evm_address,
     };
   }
 

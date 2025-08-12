@@ -3,7 +3,7 @@ import { AgentMode, type Context } from '@/shared/configuration';
 import type { Tool } from '@/shared/tools';
 import { Client, TransactionRecordQuery } from '@hashgraph/sdk';
 import { ExecuteStrategyResult, handleTransaction } from '@/shared/strategies/tx-mode-strategy';
-import { createERC20Parameters } from '@/shared/parameter-schemas/erc20.zod';
+import { createERC20Parameters } from '@/shared/parameter-schemas/hscs.zod';
 import HederaBuilder from '@/shared/hedera-utils/hedera-builder';
 import { PromptGenerator } from '@/shared/utils/prompt-generator';
 import HederaParameterNormaliser from '@/shared/hedera-utils/hedera-parameter-normaliser';
@@ -29,7 +29,7 @@ ${usageInstructions}
 
 const getERC20Address = async (client: Client, executeStrategyResult: ExecuteStrategyResult) => {
   const record = await new TransactionRecordQuery()
-    .setTransactionId(executeStrategyResult.transactionId)
+    .setTransactionId(executeStrategyResult.raw.transactionId)
     .execute(client);
   return record.contractFunctionResult?.getAddress(0);
 };
@@ -52,7 +52,7 @@ const createERC20 = async (
     if (context.mode == AgentMode.AUTONOMOUS) {
       const erc20Address = await getERC20Address(client, result as ExecuteStrategyResult);
       return {
-        ...result,
+        ...(result as ExecuteStrategyResult),
         erc20Address: erc20Address?.toString(),
         message: `ERC20 token created successfully at address ${erc20Address?.toString()}`,
       };

@@ -25,6 +25,10 @@ ${usageInstructions}
 `;
 };
 
+const postProcess = (hbarBalance: string, accountId: string) => {
+  return `Account ${accountId} has a balance of ${hbarBalance} HBAR`;
+};
+
 export const getHbarBalanceQuery = async (
   client: Client,
   context: Context,
@@ -40,7 +44,13 @@ export const getHbarBalanceQuery = async (
     const balance: BigNumber = await mirrornodeService.getAccountHBarBalance(
       normalisedParams.accountId,
     );
-    return { accountId: normalisedParams.accountId, hbarBalance: toHBar(balance).toString() };
+    return {
+      raw: { accountId: normalisedParams.accountId, hbarBalance: toHBar(balance).toString() },
+      humanMessage: postProcess(
+        toHBar(balance).toString() as string,
+        params.accountId?.toString() as string,
+      ),
+    };
   } catch (error) {
     if (error instanceof Error) {
       return error.message;

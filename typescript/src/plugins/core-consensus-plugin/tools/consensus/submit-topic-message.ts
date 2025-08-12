@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { Context } from '@/shared/configuration';
 import type { Tool } from '@/shared/tools';
 import { Client } from '@hashgraph/sdk';
-import { handleTransaction } from '@/shared/strategies/tx-mode-strategy';
+import { handleTransaction, RawTransactionResponse } from '@/shared/strategies/tx-mode-strategy';
 import HederaBuilder from '@/shared/hedera-utils/hedera-builder';
 import { submitTopicMessageParameters } from '@/shared/parameter-schemas/hcs.zod';
 import { PromptGenerator } from '@/shared/utils/prompt-generator';
@@ -20,6 +20,10 @@ ${usageInstructions}
 `;
 };
 
+const postProcess = (response: RawTransactionResponse) => {
+  return `Message submitted successfully to ${response.topicId?.toString()} with transaction id ${response.transactionId.toString()}`;
+};
+
 const submitTopicMessage = async (
   client: Client,
   context: Context,
@@ -27,7 +31,7 @@ const submitTopicMessage = async (
 ) => {
   try {
     const tx = HederaBuilder.submitTopicMessage(params);
-    const result = await handleTransaction(tx, client, context);
+    const result = await handleTransaction(tx, client, context, postProcess);
     return result;
   } catch (error) {
     if (error instanceof Error) {

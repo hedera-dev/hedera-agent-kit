@@ -12,6 +12,11 @@ export const ERC20_FACTORY_ABI = [
   'function deployToken(string memory name_, string memory symbol_, uint8 decimals_, uint256 initialSupply_) external returns (address)',
 ];
 
+export const ERC20_TRANSFER_FUNCTION_NAME = 'transfer';
+export const ERC20_TRANSFER_FUNCTION_ABI = [
+  'function transfer(address to, uint256 amount) external returns (bool)',
+];
+
 /**
  * Get the ERC20 factory contract address for the specified network
  * @param ledgerId - The Hedera network ledger ID
