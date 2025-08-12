@@ -25,7 +25,8 @@ ${usageInstructions}
 const postProcess = (account: AccountResponse) => {
   return `Details for ${account.accountId}
 Balance: ${account.balance.balance.toString()}
-Public Key: ${account.accountPublicKey}
+Public Key: ${account.accountPublicKey},
+EVM address: ${account.evmAddress},
 `;
 };
 

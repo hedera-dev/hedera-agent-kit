@@ -48,7 +48,7 @@ export const getHbarBalanceQuery = async (
       raw: { accountId: normalisedParams.accountId, hbarBalance: toHBar(balance).toString() },
       humanMessage: postProcess(
         toHBar(balance).toString() as string,
-        params.accountId?.toString() as string,
+        normalisedParams.accountId
       ),
     };
   } catch (error) {

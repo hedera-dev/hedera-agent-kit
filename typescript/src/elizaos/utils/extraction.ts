@@ -246,6 +246,7 @@ ${requiredSection}${optionalSection}⚠️ Do **not** assume values or apply def
 ⚠️ **IMPORTANT**: Always ensure numeric values are provided as NUMBERS WITHOUT QUOTES in the JSON response.
 ⚠️ **IMPORTANT**: Always ensure string values are provided as QUOTED STRINGS in the JSON response.
 ⚠️ **CRITICAL**: Enum values must be provided as QUOTED STRINGS (e.g., "finite", not finite).
+⚠️ **CRITICAL**: The returned JSON must be a valid JSON object in markdown format. Don not include comments inside it. If no params is passed return an empty JSON object.
 
 ---
 
@@ -256,7 +257,7 @@ ${exampleJson}
 
 ---
 
-Always extract values **only from the last user message**. Do not infer or carry forward values from previous interactions. Numeric values should be numbers without quotes. Enum values must be quoted strings.`;
+Numeric values should be numbers without quotes. Enum values must be quoted strings.`;
 }
 
 function generateExampleJson(required: FieldInfo[], optional: FieldInfo[]): string {

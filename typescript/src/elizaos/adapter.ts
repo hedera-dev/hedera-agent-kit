@@ -16,7 +16,6 @@ import {
   generateExtractionTemplate,
 } from '@/elizaos/utils/extraction';
 import { customParseJSONObjectFromText } from '@/elizaos/utils/parser';
-import { generateResponse } from '@/elizaos/utils/summariser';
 
 export class ElizaOSAdapter {
   private readonly client: Client;
@@ -87,7 +86,7 @@ export class ElizaOSAdapter {
 
         try {
           const result = await tool.execute(this.client, this.context, validation.data);
-          const responseText = await generateResponse(result, tool.name, runtime);
+          const responseText = result.humanMessage;
 
           if (callback) {
             callback({

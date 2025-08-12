@@ -28,7 +28,7 @@ ${usageInstructions}
 const postProcess = (tokenBalances: TokenBalancesResponse, accountId: string) => {
   const balancesText = tokenBalances.tokens
     .map(
-      token => `  Token: ${token.account}, Balance: ${token.balance}, Decimals: ${token.decimals}`,
+      token => `  Token: ${token.token_id}, Balance: ${token.balance}, Decimals: ${token.decimals}`,
     )
     .join('\n');
 
@@ -54,8 +54,8 @@ export const getAccountTokenBalancesQuery = async (
       normalisedParams.tokenId,
     );
     return {
-      raw: { accountId: params.accountId, tokenBalances: tokenBalances },
-      humanMessage: postProcess(tokenBalances, params.accountId?.toString() as string),
+      raw: { accountId: normalisedParams.accountId, tokenBalances: tokenBalances },
+      humanMessage: postProcess(tokenBalances, normalisedParams.accountId),
     };
   } catch (error) {
     console.error('Error getting account token balances', error);

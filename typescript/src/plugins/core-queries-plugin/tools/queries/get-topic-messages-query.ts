@@ -25,13 +25,13 @@ ${usageInstructions}
 `;
 };
 
-const postProcess = (messages: TopicMessage[]) => {
+const postProcess = (messages: TopicMessage[], topicId: string) => {
   const messagesText = messages.map(
     message =>
-      `${Buffer.from(message.message, 'base64').toString('utf-8')} - posted at: ${message.timestamp}\n`,
+      `${Buffer.from(message.message, 'base64').toString('utf-8')} - posted at: ${message.consensus_timestamp}\n`,
   );
 
-  return `Messages for topic ${messages[0].topicId}:
+  return `Messages for topic ${topicId}:
   --- Messages ---
   ${messagesText}
   `;
@@ -75,7 +75,7 @@ export const getTopicMessagesQuery = async (
         topicId: messages.topicId,
         messages: convertMessagesFromBase64ToString(messages.messages),
       },
-      humanMessage: postProcess(messages.messages),
+      humanMessage: postProcess(messages.messages, params.topicId),
     };
   } catch (error) {
     console.error('Error getting topic messages', error);
