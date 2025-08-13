@@ -263,6 +263,7 @@ OPENAI_API_KEY= sk-proj-...
 ### 3 – Option A: Run the Example Tool Calling Agent 
 With the tool-calling-agent (found at `typescript/examples/langchain/tool-calling-agent.ts`), you can experiment with and call the [available tools](docs/TOOLS.md) in the Hedera Agent Kit for the operator account (the account you are using in the .env file). This example tool-calling-agent uses GPT 4-o-mini that is a simple template you can use with other LLMs. This agent is intended for use with simple tasks, such as an invididual tool call.
 
+> Note - If you would like to use features of the hedera agent kit that are in this repository, but not yet published to npm, within the `package-lock.json` file in the `/examples/langchain` or `/examples/ai-sdk` directories, change the line that says `"hedera-agent-kit":vx.x.x` to `"hedera-agent-kit": "../.."`. You will also need to go to the root directory of this repository and run npm install.
 
 1. First, go into the directory where the example is and run `npm install`
 
@@ -425,7 +426,7 @@ This tool has two execution modes with AI agents;  autonomous excution and retur
  * `mode: AgentMode.AUTONOMOUS` the transaction will be executed autonomously, using the accountID set (the operator account can be set in the client with `.setOperator(process.env.ACCOUNT_ID!`)
 
 ### Hedera Plugins & Tools
-The Hedera Agent Kit provides a set of tools, bundled into plugins, to interact with the Hedera network. 
+The Hedera Agent Kit provides a set of tools, bundled into plugins, to interact with the Hedera network. See how to build your own plugins in [docs/HEDERAPLUGINS.md](docs/HEDERAPLUGINS.md)
 
 Currently, the following plugins are available:
 
@@ -464,8 +465,10 @@ _Coming Soon_
 
 ---
 
-## Creating Tools
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for details on how to contribute to the Hedera Agent Kit.
+## Creating Plugins & Contributing
+* You can find a guide for creating plugins in [docs/HEDERAPLUGINS.md](docs/HEDERAPLUGINS.md)
+
+* If you would like to contribute and suggest improvements for the cord SDK and MCP server, see [CONTRIBUTING.md](./CONTRIBUTING.md) for details on how to contribute to the Hedera Agent Kit.
 
 ## License
 Apache 2.0
