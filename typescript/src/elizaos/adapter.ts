@@ -63,10 +63,10 @@ export class ElizaOSAdapter {
         console.log(`prompt: ${prompt}`);
 
         const modelOutput = await runtime.useModel(ModelType.TEXT_LARGE, { prompt });
-        console.debug(`modelOutput: ${modelOutput}`);
+        console.log(`modelOutput: ${modelOutput}`);
 
         const parsedParams = customParseJSONObjectFromText(modelOutput) as Record<string, any>;
-        console.debug('parsedParams (raw)', parsedParams);
+        console.log('parsedParams (raw)', parsedParams);
 
         const validation = parameterSchema.safeParse(parsedParams); // parsing extracted params before calling a tool
         console.log('validated input:' + JSON.stringify(validation, null, 2));

@@ -1,4 +1,6 @@
 import { Tool } from '@/shared';
+import { ZodObject } from 'zod';
+import { zodToJsonSchema } from 'zod-to-json-schema';
 
 interface FieldInfo {
   name: string;
@@ -36,7 +38,6 @@ class ZodTypeAnalyzer {
     // Detect before unwrapping to preserve optionality
     if (val?._def?.typeName === 'ZodOptional') return true;
     return !!(typeof val.isOptional === 'function' && val.isOptional());
-
   }
 
   static getTypeHint(readableType: string): string {
@@ -144,7 +145,6 @@ class FieldAnalyzer {
     };
   }
 
-
   private static analyzeBasicField(baseInfo: any, val: any): FieldInfo {
     const type = ZodTypeAnalyzer.getBaseTypeName(val);
     return {
@@ -157,9 +157,7 @@ class FieldAnalyzer {
   private static getObjectStructure(val: any): FieldInfo[] {
     let shapeObj = val.shape || (typeof val.shape === 'function' ? val.shape() : undefined);
     if (!shapeObj) return [];
-    return Object.entries(shapeObj).map(([name, fieldVal]) =>
-      this.analyzeField(name, fieldVal)
-    );
+    return Object.entries(shapeObj).map(([name, fieldVal]) => this.analyzeField(name, fieldVal));
   }
 }
 
@@ -176,17 +174,22 @@ class TemplateFormatter {
 
   static generateExampleValue(field: FieldInfo): any {
     switch (field.type) {
-      case 'string': return this.getStringExample(field);
-      case 'number': return 123;
-      case 'boolean': return true;
+      case 'string':
+        return this.getStringExample(field);
+      case 'number':
+        return 123;
+      case 'boolean':
+        return true;
       case 'array':
         return field.structure?.length
           ? [this.generateObjectExample(field.structure)]
           : ['example_value'];
       case 'object':
         return field.structure ? this.generateObjectExample(field.structure) : {};
-      case 'record': return { "key": "value" };
-      default: return this.handleSpecialTypes(field);
+      case 'record':
+        return { key: 'value' };
+      default:
+        return this.handleSpecialTypes(field);
     }
   }
 
@@ -197,10 +200,13 @@ class TemplateFormatter {
   }
 
   private static generateObjectExample(structure: FieldInfo[]): Record<string, any> {
-    return structure.reduce((obj, field) => {
-      obj[field.name] = this.generateExampleValue(field);
-      return obj;
-    }, {} as Record<string, any>);
+    return structure.reduce(
+      (obj, field) => {
+        obj[field.name] = this.generateExampleValue(field);
+        return obj;
+      },
+      {} as Record<string, any>,
+    );
   }
 
   private static handleSpecialTypes(field: FieldInfo): any {
@@ -219,28 +225,34 @@ export function generateExtractionTemplate(tool: Tool): string {
   const schema = tool.parameters;
   const shape = schema.shape || (typeof schema.shape === 'function' ? schema.shape() : {});
   const allFields = Object.entries(shape).map(([name, val]) =>
-    FieldAnalyzer.analyzeField(name, val as any)
+    FieldAnalyzer.analyzeField(name, val as any),
   );
   const requiredFields = allFields.filter(f => !f.isOptional);
   const optionalFields = allFields.filter(f => f.isOptional);
   const titleMatch = tool.description.match(/This tool will ([^.]+)/);
   const title = titleMatch ? titleMatch[1].trim() : 'perform the action';
-  return buildTemplate(title, requiredFields, optionalFields);
+  return buildTemplate(title, tool.name, requiredFields, optionalFields, schema);
 }
 
-function buildTemplate(title: string, required: FieldInfo[], optional: FieldInfo[]): string {
+function buildTemplate(
+  description: string,
+  actionName: string,
+  required: FieldInfo[],
+  optional: FieldInfo[],
+  zodSchema: ZodObject<any>,
+): string {
   const requiredSection = required.length
     ? `### Required:\n${required.map(f => TemplateFormatter.formatField(f)).join('\n')}\n`
     : '';
   const optionalSection = optional.length
     ? `### Optional (Include only if **explicitly mentioned** in the latest user message):\n${optional.map(f => TemplateFormatter.formatField(f)).join('\n')}\n`
     : '';
-  const exampleJson = generateExampleJson(required, optional);
+  const toolParamsSchema = zodToJsonSchema(zodSchema, actionName);
   return `Given the recent messages and Hedera wallet information below:
 {{recentMessages}}
 {{hederaAccountDetails}}
 
-Extract the following parameters required to ${title}.
+Extract the following parameters required to ${description}.
 
 ${requiredSection}${optionalSection}⚠️ Do **not** assume values or apply defaults. Do **not** set a field unless it is clearly specified in the latest user input.
 ⚠️ **IMPORTANT**: Always ensure numeric values are provided as NUMBERS WITHOUT QUOTES in the JSON response.
@@ -253,57 +265,10 @@ ${requiredSection}${optionalSection}⚠️ Do **not** assume values or apply def
 ### Response format:
 Respond with a JSON markdown block that includes the fields that were explicitly mentioned in the most recent user message.
 
-${exampleJson}
+Response JSON schema:
+${JSON.stringify(toolParamsSchema, null, 2)}
 
 ---
 
 Numeric values should be numbers without quotes. Enum values must be quoted strings.`;
-}
-
-function generateExampleJson(required: FieldInfo[], optional: FieldInfo[]): string {
-  const formatValue = (f: FieldInfo) => {
-    const ex = TemplateFormatter.generateExampleValue(f);
-    return typeof ex === 'string' ? `"${ex}"` : JSON.stringify(ex);
-  };
-
-  const optionalComments = optional.map(
-    f => `// "${f.name}": ${formatValue(f)}`
-  );
-
-  let lines: string[] = [];
-
-  if (required.length > 0) {
-    // Start an object with required fields
-    lines.push('{');
-    required.forEach((f, i) => {
-      const comma = i < required.length - 1 || optional.length > 0 ? ',' : '';
-      lines.push(`  "${f.name}": ${formatValue(f)}${comma}`);
-    });
-
-    if (optional.length > 0) {
-      lines.push('  // Optional fields only if present in input:');
-      optionalComments.forEach((c, i) => {
-        const comma = i < optionalComments.length - 1 ? ',' : '';
-        lines.push(`  ${c}${comma}`);
-      });
-    }
-
-    lines.push('}');
-
-  } else if (optional.length > 0) {
-    // Only optional fields
-    lines.push('{');
-    lines.push('  // Optional fields only if present in input:');
-    optionalComments.forEach((c, i) => {
-      const comma = i < optionalComments.length - 1 ? ',' : '';
-      lines.push(`  ${c}${comma}`);
-    });
-    lines.push('}');
-
-  } else {
-    // No fields at all
-    lines.push('{}');
-  }
-
-  return `\`\`\`json\n${lines.join('\n')}\n\`\`\``;
 }
