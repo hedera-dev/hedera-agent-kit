@@ -263,7 +263,7 @@ OPENAI_API_KEY= sk-proj-...
 ### 3 – Option A: Run the Example Tool Calling Agent 
 With the tool-calling-agent (found at `typescript/examples/langchain/tool-calling-agent.ts`), you can experiment with and call the [available tools](docs/TOOLS.md) in the Hedera Agent Kit for the operator account (the account you are using in the .env file). This example tool-calling-agent uses GPT 4-o-mini that is a simple template you can use with other LLMs. This agent is intended for use with simple tasks, such as an invididual tool call.
 
-> Note - If you would like to use features of the hedera agent kit that are in this repository, but not yet published to npm, within the `package-lock.json` file in the `/examples/langchain` or `/examples/ai-sdk` directories, change the line that says `"hedera-agent-kit":vx.x.x` to `"hedera-agent-kit": "../.."`. You will also need to go to the root directory of this repository and run npm install.
+> Note: Running from Source - If you would like to use features of the hedera agent kit that are in this repository, but not yet published to npm, within the `package-lock.json` file in the `/examples/langchain` or `/examples/ai-sdk` directories, change the line that says `"hedera-agent-kit":vx.x.x` to `"hedera-agent-kit": "../.."`. You will also need to go to the root directory of this repository and run `npm install`.
 
 1. First, go into the directory where the example is and run `npm install`
 
@@ -274,7 +274,7 @@ npm install
 2. Then, run the example
 
 ```bash
-npm run langchain:tool-calling-agent
+npm run langchain:plugin-tool-calling-agent
 ```
 
 3. interact with the agent. First, tell the agent who you are (your name) and try out some of the interactions by asking questions: 
