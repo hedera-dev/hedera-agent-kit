@@ -40,10 +40,6 @@ const transferERC721 = async (
   params: z.infer<ReturnType<typeof transferERC721Parameters>>,
 ) => {
   try {
-<<<<<<< HEAD
-=======
-    console.log('transferERC721', JSON.stringify(params, null, 2));
->>>>>>> 2c21a7d (Improved ERC721 transfer to support both addresses)
     const mirrorNode = getMirrornodeService(context.mirrornodeService, client.ledgerId!);
 
     const normalisedParams = await HederaParameterNormaliser.normaliseTransferERC721Params(
