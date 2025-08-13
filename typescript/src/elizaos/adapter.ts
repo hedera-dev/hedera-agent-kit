@@ -16,7 +16,6 @@ import { generateExtractionTemplate } from '@/elizaos/utils/extraction';
 import { customParseJSONObjectFromText } from '@/elizaos/utils/parser';
 import { ToolDiscovery } from '@/shared/tool-discovery';
 
-
 export class ElizaOSAdapter {
   private readonly client: Client;
   private readonly context: Context;
@@ -30,7 +29,7 @@ export class ElizaOSAdapter {
   }
 
   /**
-   * Generates and returns actions
+   * Maps hedera-agent-kit tools and returns ElizaOS compatible actions
    */
   getActions(): Action[] {
     return this.tools.map(tool => this.createActionFromTool(tool));
@@ -56,38 +55,52 @@ export class ElizaOSAdapter {
           throw new Error('State is undefined');
         }
 
+        // create an extraction prompt for extracting tool parameters from recent user messages
         const prompt = composePromptFromState({
           state,
           template: generateExtractionTemplate(tool),
         });
         console.log(`prompt: ${prompt}`);
 
+        // execute extraction prompt
         const modelOutput = await runtime.useModel(ModelType.TEXT_LARGE, { prompt });
-        console.log(`modelOutput: ${modelOutput}`);
+        console.log(`Model extraction output: ${modelOutput}`);
 
+        // custom parsing params from Markdown JSON notation to JS object
         const parsedParams = customParseJSONObjectFromText(modelOutput) as Record<string, any>;
-        console.log('parsedParams (raw)', parsedParams);
+        console.log('Parsed params object', parsedParams);
 
+        // validating parameters with tools input zod schema
         const validation = parameterSchema.safeParse(parsedParams); // parsing extracted params before calling a tool
-        console.log('validated input:' + JSON.stringify(validation, null, 2));
+        console.log('Validated params:' + JSON.stringify(validation, null, 2));
 
+        // print error if validation failed
         if (!validation.success) {
+          // call llm to generate a comprehensive message to the user about missing params
+          const promptText = `given the recent messages {{recent_messages}}, 
+          tool description: ${tool.description}
+          and the error message: ${validation.error.format()}
+          generate a comprehensive message to the user about missing params
+          `;
+
+          const modelOutput = await runtime.useModel(ModelType.TEXT_LARGE, { promptText });
           if (callback) {
             callback({
-              text: 'Invalid or incomplete parameters.',
+              text: modelOutput,
               content: { error: validation.error.format() },
             });
           }
           return {
             success: false,
-            text: 'Invalid or incomplete parameters.',
+            text: modelOutput,
             error: validation.error.toString(),
           };
         }
 
+        // call the action
         try {
           const result = await tool.execute(this.client, this.context, validation.data);
-          const responseText = result.humanMessage;
+          const responseText = result.humanMessage; // extract the human-readable response provided by the tool
 
           if (callback) {
             callback({
@@ -98,6 +111,7 @@ export class ElizaOSAdapter {
 
           return { success: true, text: responseText };
         } catch (err) {
+          // handle other errors
           const message = err instanceof Error ? err.message : 'Unknown error';
           logger.error(`Error running tool ${tool.method}:`, err);
 
