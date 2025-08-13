@@ -1,31 +1,32 @@
 import {
   type Action,
+  ActionResult,
+  composePromptFromState,
   type HandlerCallback,
   type IAgentRuntime,
-  type Memory,
-  type State,
-  ModelType,
-  composePromptFromState,
   logger,
-  ActionResult,
+  type Memory,
+  ModelType,
+  type State,
 } from '@elizaos/core';
 import { Client } from '@hashgraph/sdk';
 import type { Tool } from '@/shared/tools';
-import { Context } from '@/shared/configuration';
-import {
-  generateExtractionTemplate,
-} from '@/elizaos/utils/extraction';
+import { Configuration, Context } from '@/shared/configuration';
+import { generateExtractionTemplate } from '@/elizaos/utils/extraction';
 import { customParseJSONObjectFromText } from '@/elizaos/utils/parser';
+import { ToolDiscovery } from '@/shared/tool-discovery';
+
 
 export class ElizaOSAdapter {
   private readonly client: Client;
   private readonly context: Context;
   private tools: Tool[];
 
-  constructor(client: Client, context: Context, tools: Tool[]) {
+  constructor(client: Client, configuration: Configuration) {
     this.client = client;
-    this.context = context;
-    this.tools = tools;
+    this.context = configuration.context || {};
+    const toolDiscovery = ToolDiscovery.createFromConfiguration(configuration);
+    this.tools = toolDiscovery.getAllTools(this.context, configuration);
   }
 
   /**
@@ -61,7 +62,7 @@ export class ElizaOSAdapter {
         });
         console.log(`prompt: ${prompt}`);
 
-        const modelOutput = await runtime.useModel(ModelType.TEXT_LARGE, {prompt});
+        const modelOutput = await runtime.useModel(ModelType.TEXT_LARGE, { prompt });
         console.debug(`modelOutput: ${modelOutput}`);
 
         const parsedParams = customParseJSONObjectFromText(modelOutput) as Record<string, any>;
