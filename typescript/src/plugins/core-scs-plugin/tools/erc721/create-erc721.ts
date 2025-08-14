@@ -30,7 +30,7 @@ The contractId returned by the tool is the address of the ERC721 Factory contrac
 
 const getERC721Address = async (client: Client, executeStrategyResult: ExecuteStrategyResult) => {
   const record = await new TransactionRecordQuery()
-    .setTransactionId(executeStrategyResult.transactionId)
+    .setTransactionId(executeStrategyResult.raw.transactionId)
     .execute(client);
   return '0x' + record.contractFunctionResult?.getAddress(0);
 };
