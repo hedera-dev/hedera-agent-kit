@@ -28,7 +28,7 @@ Example: "Mint 1 of 0.0.6458037" means minting the amount of 1 of the token with
 };
 
 const postProcess = (response: RawTransactionResponse) => {
-  return `Token ${response.tokenId?.toString()} successfully minted with transaction id ${response.transactionId.toString()}`;
+  return `Tokens successfully minted with transaction id ${response.transactionId.toString()}`;
 };
 
 const mintFungibleToken = async (

@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { Context } from '@/shared/configuration';
 import type { Tool } from '@/shared/tools';
 import { Client } from '@hashgraph/sdk';
-import { handleTransaction } from '@/shared/strategies/tx-mode-strategy';
+import { handleTransaction, RawTransactionResponse } from '@/shared/strategies/tx-mode-strategy';
 import HederaBuilder from '@/shared/hedera-utils/hedera-builder';
 import { transferHbarParameters } from '@/shared/parameter-schemas/has.zod';
 import HederaParameterNormaliser from '@/shared/hedera-utils/hedera-parameter-normaliser';
@@ -31,6 +31,10 @@ ${usageInstructions}
 `;
 };
 
+const postProcess = (response: RawTransactionResponse) => {
+  return `HBAR successfully transferred. Transaction ID: ${response.transactionId}`;
+}
+
 const transferHbar = async (
   client: Client,
   context: Context,
@@ -43,7 +47,7 @@ const transferHbar = async (
       client,
     );
     const tx = HederaBuilder.transferHbar(normalisedParams);
-    const result = await handleTransaction(tx, client, context);
+    const result = await handleTransaction(tx, client, context, postProcess);
     return result;
   } catch (error) {
     if (error instanceof Error) {

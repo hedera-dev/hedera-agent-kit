@@ -21,7 +21,7 @@ ${usageInstructions}
 };
 
 const postProcess = (response: RawTransactionResponse) => {
-  return `Message submitted successfully to ${response.topicId?.toString()} with transaction id ${response.transactionId.toString()}`;
+  return `Message submitted successfully with transaction id ${response.transactionId.toString()}`;
 };
 
 const submitTopicMessage = async (
