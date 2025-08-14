@@ -1,1 +1,0 @@
-export { ElizaOSAdapter } from './adapter';
