@@ -30,13 +30,13 @@ export type TopicMessagesResponse = {
 };
 
 export type TokenBalance = {
-  automatic_association: boolean,
-  created_timestamp: string,
-  token_id: string,
-  freeze_status: string,
-  kyc_status: string,
-  balance: number,
-  decimals: number,
+  automatic_association: boolean;
+  created_timestamp: string;
+  token_id: string;
+  freeze_status: string;
+  kyc_status: string;
+  balance: number;
+  decimals: number;
 };
 
 export type TokenBalancesResponse = {

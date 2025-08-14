@@ -33,7 +33,7 @@ ${usageInstructions}
 
 const postProcess = (response: RawTransactionResponse) => {
   return `HBAR successfully transferred. Transaction ID: ${response.transactionId}`;
-}
+};
 
 const transferHbar = async (
   client: Client,
