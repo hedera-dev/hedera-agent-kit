@@ -8,6 +8,7 @@ import transferERC721Tool, {
 import mintERC721Tool, {
   MINT_ERC721_TOOL,
 } from '@/plugins/core-scs-plugin/tools/erc721/mint-erc721';
+import createERC721Tool, { CREATE_ERC721_TOOL } from './tools/erc721/create-erc721';
 
 export const coreSCSPlugin: Plugin = {
   name: 'core-scs-plugin',
@@ -19,6 +20,7 @@ export const coreSCSPlugin: Plugin = {
       transferERC20Tool(context),
       transferERC721Tool(context),
       mintERC721Tool(context),
+      createERC721Tool(context),
     ];
   },
 };
@@ -29,6 +31,7 @@ export const coreSCSPluginToolNames = {
   MINT_ERC721_TOOL,
   CREATE_ERC20_TOOL,
   TRANSFER_ERC20_TOOL,
+  CREATE_ERC721_TOOL,
 } as const;
 
 export default { coreSCSPlugin, coreSCSPluginToolNames };
