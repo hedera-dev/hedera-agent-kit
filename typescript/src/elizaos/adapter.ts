@@ -60,19 +60,19 @@ export class ElizaOSAdapter {
           state,
           template: generateExtractionTemplate(tool),
         });
-        console.log(`prompt: ${prompt}`);
+        logger.debug(`prompt: ${prompt}`);
 
         // execute extraction prompt
         const modelOutput = await runtime.useModel(ModelType.TEXT_LARGE, { prompt });
-        console.log(`Model extraction output: ${modelOutput}`);
+        logger.debug(`Model extraction output: ${modelOutput}`);
 
         // custom parsing params from Markdown JSON notation to JS object
         const parsedParams = customParseJSONObjectFromText(modelOutput) as Record<string, any>;
-        console.log('Parsed params object', parsedParams);
+        logger.debug('Parsed params object', parsedParams);
 
         // validating parameters with tools input zod schema
         const validation = parameterSchema.safeParse(parsedParams); // parsing extracted params before calling a tool
-        console.log('Validated params:' + JSON.stringify(validation, null, 2));
+        logger.debug('Validated params:' + JSON.stringify(validation, null, 2));
 
         // print error if validation failed
         if (!validation.success) {
