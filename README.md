@@ -450,7 +450,7 @@ Currently, the following plugins are available:
 To request more functionality in the toolkit for:
 * [Token Service](https://docs.hedera.com/hedera/sdks-and-apis/sdks/token-service)
 * [Consensus Service](https://docs.hedera.com/hedera/sdks-and-apis/sdks/consensus-service)
-* [Smart Contract Servce](https://docs.hedera.com/hedera/tutorials/smart-contracts)
+* [EVM / Smart Contract Servce](https://docs.hedera.com/hedera/tutorials/smart-contracts)
 
 Please [open an issue](https://github.com/hedera-dev/hedera-agent-kit/issues/new?template=toolkit_feature_request.yml&labels=feature-request).
 

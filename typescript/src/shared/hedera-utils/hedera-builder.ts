@@ -20,7 +20,7 @@ import {
   createTopicParametersNormalised,
   submitTopicMessageParametersNormalised,
 } from '@/shared/parameter-schemas/hcs.zod';
-import { contractExecuteTransactionParametersNormalised } from '@/shared/parameter-schemas/hscs.zod';
+import { contractExecuteTransactionParametersNormalised } from '@/shared/parameter-schemas/evm.zod';
 
 export default class HederaBuilder {
   static createFungibleToken(

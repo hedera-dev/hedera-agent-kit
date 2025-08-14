@@ -3,7 +3,7 @@ import { AgentMode, type Context } from '@/shared/configuration';
 import type { Tool } from '@/shared/tools';
 import { Client, TransactionRecordQuery } from '@hashgraph/sdk';
 import { ExecuteStrategyResult, handleTransaction } from '@/shared/strategies/tx-mode-strategy';
-import { createERC20Parameters } from '@/shared/parameter-schemas/hscs.zod';
+import { createERC20Parameters } from '@/shared/parameter-schemas/evm.zod';
 import HederaBuilder from '@/shared/hedera-utils/hedera-builder';
 import { PromptGenerator } from '@/shared/utils/prompt-generator';
 import HederaParameterNormaliser from '@/shared/hedera-utils/hedera-parameter-normaliser';

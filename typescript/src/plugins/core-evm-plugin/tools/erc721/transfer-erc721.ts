@@ -11,7 +11,7 @@ import {
   ERC721_TRANSFER_FUNCTION_ABI,
   ERC721_TRANSFER_FUNCTION_NAME,
 } from '@/shared/constants/contracts';
-import { transferERC721Parameters } from '@/shared/parameter-schemas/hscs.zod';
+import { transferERC721Parameters } from '@/shared/parameter-schemas/evm.zod';
 
 const transferERC721Prompt = (context: Context = {}) => {
   const contextSnippet = PromptGenerator.getContextSnippet(context);

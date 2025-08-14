@@ -33,7 +33,7 @@ import {
   transferERC20Parameters,
   transferERC721Parameters,
   mintERC721Parameters,
-} from '@/shared/parameter-schemas/hscs.zod';
+} from '@/shared/parameter-schemas/evm.zod';
 
 export default class HederaParameterNormaliser {
   static async normaliseCreateFungibleTokenParams(

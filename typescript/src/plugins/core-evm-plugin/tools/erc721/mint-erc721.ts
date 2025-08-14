@@ -8,7 +8,7 @@ import HederaBuilder from '@/shared/hedera-utils/hedera-builder';
 import { PromptGenerator } from '@/shared/utils/prompt-generator';
 import { getMirrornodeService } from '@/shared/hedera-utils/mirrornode/hedera-mirrornode-utils';
 import { ERC721_MINT_FUNCTION_ABI, ERC721_MINT_FUNCTION_NAME } from '@/shared/constants/contracts';
-import { mintERC721Parameters } from '@/shared/parameter-schemas/hscs.zod';
+import { mintERC721Parameters } from '@/shared/parameter-schemas/evm.zod';
 
 const mintERC721Prompt = (context: Context = {}) => {
   const contextSnippet = PromptGenerator.getContextSnippet(context);
