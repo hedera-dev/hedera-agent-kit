@@ -5,16 +5,16 @@
 *                                                   @hashgraph/developer-relations @hashgraph/hedera-agent-kit
 
 # Protection Rules for Github Configuration Files and Actions Workflows
-/.github/                                           @hashgraph/platform-ci
-/.github/workflows/                                 @hashgraph/platform-ci
+/.github/                                           @hashgraph/platform-ci @hashgraph/release-engineering-managers
+/.github/workflows/                                 @hashgraph/platform-ci @hashgraph/release-engineering-managers
 
 # Self-protection for root CODEOWNERS files (this file should not exist and should definitely require approval)
-/CODEOWNERS                                         @hashgraph/platform-ci
+/CODEOWNERS                                         @hashgraph/release-engineering-managers
 
 # Protect the repository root files
-/README.md                                          @hashgraph/platform-ci
-**/LICENSE                                          @hashgraph/platform-ci
+/README.md                                          @hashgraph/platform-ci @hashgraph/release-engineering-managers @hashgraph/developer-relations @hashgraph/hedera-agent-kit 
+**/LICENSE                                          @hashgraph/release-engineering-managers
 
 # Git Ignore definitions
-**/.gitignore                                       @hashgraph/platform-ci
-**/.gitignore.*                                     @hashgraph/platform-ci
+**/.gitignore                                       @hashgraph/platform-ci @hashgraph/release-engineering-managers 
+**/.gitignore.*                                     @hashgraph/platform-ci @hashgraph/release-engineering-managers
