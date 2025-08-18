@@ -28,7 +28,7 @@ permissions:
 jobs:
   title-check:
     name: Title Check
-    runs-on: network-node-linux-medium
+    runs-on: hedera-agent-linux-medium
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
@@ -42,8 +42,7 @@ jobs:
 
   assignee-check:
     name: Assignee Check
-    runs-on: network-node-linux-medium
-
+    runs-on: hedera-agent-linux-medium
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
