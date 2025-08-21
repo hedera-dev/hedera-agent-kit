@@ -56,10 +56,8 @@ npm init -y
 npm install hedera-agent-kit @langchain/openai @langchain/core langchain @hashgraph/sdk dotenv
 ```
 
-> You may need to add "type": "module" to your package.json file so that your project allows ES module imports
-
 ```json
-"name": "hello-hedera-agent-kit",
+  "name": "hello-hedera-agent-kit",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {},
@@ -86,7 +84,7 @@ OPENAI_API_KEY="sk-proj-..." # Create an OpenAPI Key at https://platform.openai.
 
 
 ### 3 – Simple "Hello Hedera Agent Kit" Example
-Create a a new file called `index.js` in the `hello-hedera-agent-kit` folder.
+Create a new file called `index.js` in the `hello-hedera-agent-kit` folder.
 
 ```bash
 touch index.js
@@ -381,6 +379,18 @@ node dist/index.js
   }
 }
 ```
+
+
+### 7 - Option E: Try out the Hedera Agent Kit with ElizaOS
+
+ElizaOS is a powerful framework for building autonomous AI agents. The Hedera plugin for ElizaOS enables seamless integration with Hedera's blockchain services, allowing you to create sophisticated AI agents that can interact with the Hedera network.
+
+> ⚠️ **Development Status**: The ElizaOS plugin is currently in active development. Features and APIs may change as the plugin evolves.
+
+1. Clone the [Hedera ElizaOS Plugin Repository](https://github.com/hedera-dev/eliza-plugin-hedera/tree/feat/rework-v3)
+2. Install ElizaOS CLI
+3. Follow the [Hedera ElizaOS Plugin Docs](https://github.com/hedera-dev/eliza-plugin-hedera/tree/feat/rework-v3)
+
 
 ---
 ## About the Agent Kit
