@@ -1,16 +1,17 @@
 import { z } from 'zod';
 import { AgentMode, coreAccountPlugin, coreHTSPlugin, type Context } from 'hedera-agent-kit';
-import { Client, AccountId, PrivateKey } from '@hashgraph/sdk';
+import { Client, AccountId, PrivateKey, LedgerId } from '@hashgraph/sdk';
 import { coreQueriesPlugin, coreConsensusPlugin } from 'hedera-agent-kit';
 import type { Configuration } from 'hedera-agent-kit';
 
 export type AppMode = 'autonomous' | 'human';
 export type HederaNetwork = 'testnet' | 'mainnet';
 
+LedgerId.MAINNET.toString()
+
 const EnvSchema = z.object({
     NEXT_PUBLIC_AGENT_MODE: z.enum(['autonomous', 'human']).default('human'),
     NEXT_PUBLIC_NETWORK: z.enum(['testnet', 'mainnet']).default('testnet'),
-    // Server-only (optional for now; required for autonomous mode in 2.2)
     HEDERA_OPERATOR_ID: z.string().optional(),
     HEDERA_OPERATOR_KEY: z.string().optional(),
 });
