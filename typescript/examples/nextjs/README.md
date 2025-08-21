@@ -46,6 +46,21 @@ Create a `.env.local` file based on the provided `.env.local.example`:
 
 > **Note:** Never expose `HEDERA_OPERATOR_KEY` or non-public AI keys to the client.
 
+## Autonomous Mode: ECDSA Key Requirement
+
+**If using autonomous mode**, you must use an **ECDSA private key** for `HEDERA_OPERATOR_KEY`. The Hedera Agent Kit requires ECDSA keys for autonomous transaction signing.
+
+### Getting Your ECDSA Key
+
+1. Visit [https://portal.hedera.com](https://portal.hedera.com)
+2. Create or access your Hedera account
+3. Generate or retrieve your **ECDSA private key** (not ED25519)
+4. The key format should be:
+   - DER hex starting with `303002...` OR
+   - 0x-prefixed 64-character hex string
+
+> **Important:** ED25519 keys will not work in autonomous mode. Only ECDSA keys are supported.
+
 ## Project Structure
 
 ```
