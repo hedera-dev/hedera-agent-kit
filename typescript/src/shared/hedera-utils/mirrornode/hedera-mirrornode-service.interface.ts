@@ -4,6 +4,7 @@ import {
   TokenBalancesResponse,
   TopicMessagesResponse,
   TokenDetails,
+  TransactionDetailsResponse,
 } from './types';
 
 export interface IHederaMirrornodeService {
@@ -12,4 +13,5 @@ export interface IHederaMirrornodeService {
   getAccountTokenBalances(accountId: string): Promise<TokenBalancesResponse>;
   getTopicMessages(queryParams: TopicMessagesQueryParams): Promise<TopicMessagesResponse>;
   getTokenDetails(tokenId: string): Promise<TokenDetails>;
+  getTransactionDetails(transactionId: string, nonce?: number): Promise<TransactionDetailsResponse>;
 }

@@ -33,6 +33,7 @@ async function bootstrap(): Promise<void> {
 
   const {
     GET_HBAR_BALANCE_QUERY_TOOL,
+    GET_TRANSACTION_DETAILS_QUERY_TOOL
   } = coreQueriesPluginToolNames;
 
 
@@ -46,6 +47,7 @@ async function bootstrap(): Promise<void> {
         SUBMIT_TOPIC_MESSAGE_TOOL,
         CREATE_FUNGIBLE_TOKEN_TOOL,
         GET_HBAR_BALANCE_QUERY_TOOL,
+        GET_TRANSACTION_DETAILS_QUERY_TOOL,
         // Plugin tools
         'example_greeting_tool',
         'example_hbar_transfer_tool',

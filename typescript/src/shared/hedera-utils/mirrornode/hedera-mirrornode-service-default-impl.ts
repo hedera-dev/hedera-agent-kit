@@ -10,6 +10,7 @@ import {
   TopicMessagesAPIResponse,
   TopicMessagesQueryParams,
   TopicMessagesResponse,
+  TransactionDetailsResponse,
 } from './types';
 import BigNumber from 'bignumber.js';
 
@@ -99,6 +100,23 @@ export class HederaMirrornodeServiceDefaultImpl implements IHederaMirrornodeServ
   async getTokenDetails(tokenId: string): Promise<TokenDetails> {
     const url = `${this.baseUrl}/tokens/${tokenId}`;
     const response = await fetch(url);
+    return await response.json();
+  }
+
+  async getTransactionDetails(transactionId: string, nonce?: number): Promise<TransactionDetailsResponse> {
+    let url = `${this.baseUrl}/transactions/${transactionId}`;
+    if (nonce !== undefined) {
+      url += `?nonce=${nonce}`;
+    }
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(
+        `HTTP error! status: ${response.status}. Message: ${response.statusText}`,
+      );
+    }
+
     return await response.json();
   }
 }
