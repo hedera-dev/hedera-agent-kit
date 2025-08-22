@@ -9,13 +9,17 @@ import {
   mintFungibleTokenParameters,
   mintNonFungibleTokenParameters,
 } from '@/shared/parameter-schemas/hts.zod';
-import { transferHbarParameters } from '@/shared/parameter-schemas/has.zod';
+import {
+  deleteAccountParameters,
+  deleteAccountParametersNormalised,
+  transferHbarParameters,
+} from '@/shared/parameter-schemas/has.zod';
 import {
   createTopicParameters,
   createTopicParametersNormalised,
 } from '@/shared/parameter-schemas/hcs.zod';
 
-import { Client, Hbar, PublicKey, TokenSupplyType, TokenType } from '@hashgraph/sdk';
+import { AccountId, Client, Hbar, PublicKey, TokenSupplyType, TokenType } from '@hashgraph/sdk';
 import { Context } from '@/shared/configuration';
 import z from 'zod';
 import {
@@ -33,6 +37,7 @@ import {
   transferERC20Parameters,
   transferERC721Parameters,
   mintERC721Parameters,
+  createERC721Parameters,
 } from '@/shared/parameter-schemas/evm.zod';
 
 export default class HederaParameterNormaliser {
@@ -423,6 +428,26 @@ export default class HederaParameterNormaliser {
       contractId,
       functionParameters,
       gas: 100_000,
+    };
+  }
+
+  static normaliseDeleteAccount(
+    params: z.infer<ReturnType<typeof deleteAccountParameters>>,
+    context: Context,
+    client: Client,
+  ): z.infer<ReturnType<typeof deleteAccountParametersNormalised>> {
+    if (!AccountResolver.isHederaAddress(params.accountId)) {
+      throw new Error('Account ID must be a Hedera address');
+    }
+
+    // if no transfer account ID is provided, use the operator account ID
+    if (!params.transferAccountId) {
+      params.transferAccountId = AccountResolver.getDefaultAccount(context, client);
+    }
+
+    return {
+      accountId: AccountId.fromString(params.accountId),
+      transferAccountId: AccountId.fromString(params.transferAccountId),
     };
   }
 

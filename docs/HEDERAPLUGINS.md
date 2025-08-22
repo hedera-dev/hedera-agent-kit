@@ -23,14 +23,15 @@ Plugins can be found in [typescript/src/plugins](../typescript/src/plugins)
 ### Core Account Plugin Tools (core-account-plugin)
 This plugin provides tools for Hedera Account Service operations
 
-| Tool Name                                       | Description                                        |Usage                                             |
-| ----------------------------------------------- | -------------------------------------------------- |--------------------------------------------------------- |
-| `TRANSFER_HBAR_TOOL`| Transfer HBAR between accounts | Provide the amount of of HBAR to transfer, the account to transfer to, and optionally, a transaction memo.|
+| Tool Name                                       | Description                                        | Usage                                                                                                                                                                                              |
+| ----------------------------------------------- | -------------------------------------------------- |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `TRANSFER_HBAR_TOOL`| Transfer HBAR between accounts | Provide the amount of of HBAR to transfer, the account to transfer to, and optionally, a transaction memo.                                                                                         |
+| `DELETE_ACCOUNT_TOOL`| Delete an account and send all remaining assets to a specified account | Provide the ID of account to delete (required) and the transfer account ID to send the remaining assets to (optional). If transfer account is not specified the operator's account ID will be used |
 
 ### Core Hedera Consensus Service Plugin Tools (core-consensus-plugin)
 
 | Tool Name                                       | Description                                        |  Usage                                             |
-| ----------------------------------------------- | -------------------------------------------------- | --------------------------------------------------------- |
+| ----------------------------------------------- | -------------------------------------------------- | ------------------------account ID --------------------------------- |
 | `CREATE_TOPIC_TOOL`| Create a new topic on the Hedera network | Optionally provide a topic memo (string) and whether to set a submit key (boolean - set to true if you want to set a submit key, otherwise false)| 
 | `SUBMIT_TOPIC_MESSAGE_TOOL`| Submit a message to a topic on the Hedera network | Provide the topic ID (string, required) and the message to submit (string, required)| 
 
