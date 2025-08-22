@@ -9,7 +9,11 @@ import {
   mintFungibleTokenParameters,
   mintNonFungibleTokenParameters,
 } from '@/shared/parameter-schemas/hts.zod';
-import { transferHbarParameters } from '@/shared/parameter-schemas/has.zod';
+import {
+  createAccountParameters,
+  createAccountParametersNormalised,
+  transferHbarParameters,
+} from '@/shared/parameter-schemas/has.zod';
 import {
   createTopicParameters,
   createTopicParametersNormalised,
@@ -33,6 +37,7 @@ import {
   transferERC20Parameters,
   transferERC721Parameters,
   mintERC721Parameters,
+  createERC721Parameters,
 } from '@/shared/parameter-schemas/evm.zod';
 
 export default class HederaParameterNormaliser {
@@ -228,6 +233,41 @@ export default class HederaParameterNormaliser {
       }
       normalised.submitKey = PublicKey.fromString(publicKey);
     }
+
+    return normalised;
+  }
+
+  static async normaliseCreateAccount(
+    params: z.infer<ReturnType<typeof createAccountParameters>>,
+    context: Context,
+    client: Client,
+    mirrorNode: IHederaMirrornodeService,
+  ) {
+    const initialBalance = params.initialBalance ?? 0;
+    const maxAssociations = params.maxAutomaticTokenAssociations ?? -1; // unlimited if -1
+
+    // Try resolving the publicKey in priority order
+    let publicKey = params.publicKey
+      ?? client.operatorPublicKey?.toStringDer();
+
+    if (!publicKey) {
+      const defaultAccountId = AccountResolver.getDefaultAccount(context, client);
+      if (defaultAccountId) {
+        const account = await mirrorNode.getAccount(defaultAccountId);
+        publicKey = account?.accountPublicKey;
+      }
+    }
+
+    if (!publicKey) {
+      throw new Error("Unable to resolve public key: no param, mirror node, or client operator key available.");
+    }
+
+    const normalised: z.infer<ReturnType<typeof createAccountParametersNormalised>> = {
+      accountMemo: params.accountMemo,
+      initialBalance,
+      key: PublicKey.fromString(publicKey),
+      maxAutomaticTokenAssociations: maxAssociations,
+    };
 
     return normalised;
   }

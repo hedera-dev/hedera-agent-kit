@@ -23,9 +23,10 @@ Plugins can be found in [typescript/src/plugins](../typescript/src/plugins)
 ### Core Account Plugin Tools (core-account-plugin)
 This plugin provides tools for Hedera Account Service operations
 
-| Tool Name                                       | Description                                        |Usage                                             |
-| ----------------------------------------------- | -------------------------------------------------- |--------------------------------------------------------- |
-| `TRANSFER_HBAR_TOOL`| Transfer HBAR between accounts | Provide the amount of of HBAR to transfer, the account to transfer to, and optionally, a transaction memo.|
+| Tool Name             | Description                             | Usage                                                                                                                               |
+|-----------------------|-----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| `TRANSFER_HBAR_TOOL`  | Transfer HBAR between accounts          | Provide the amount of of HBAR to transfer, the account to transfer to, and optionally, a transaction memo.                          |
+| `CREATE_ACCOUNT_TOOL` | Creates new hedera account, either for a provided public key, or for the keypair provided in the operator account | Provide agreement text, type of key that should be generated, and optionally account memo, initial balance and max auto association |
 
 ### Core Hedera Consensus Service Plugin Tools (core-consensus-plugin)
 
@@ -67,7 +68,7 @@ You also have the option to pick and choose which tools from a Hedera plugin you
 `AgentMode` , `Configuration`, and `Context` are also required to be imported to configure the plugins.
 
 ```javascript
-import { AgentMode, Configuration, Context, coreAccountPlugin, coreAccountPluginToolNames, coreConsensusPlugin, coreConsensusPluginToolNames, coreHTSPlugin, coreHTSPluginToolNames, coreQueriesPlugin, coreQueriesPluginToolNames,} from 'hedera-agent-kit';
+import { AgentMode, Configuration, Context, coreAccountPlugin, coreAccountPluginToolNames, coreConsensusPlugin, coreConsensusPluginToolNames, coreHTSPlugin, coreHTSPluginToolNames, coreQueriesPlugin, coreQueriesPluginToolNames} from 'hedera-agent-kit';
 ```
 
 You will instantiate the HederaAgentToolkit with your chosen framework, defining the tools and plugins you want to use, and mode (AUTONOMOUS or RETURN_BYTES for human in the loop), as well as the plugins you wish to use:
@@ -86,6 +87,7 @@ You will instantiate the HederaAgentToolkit with your chosen framework, defining
         SUBMIT_TOPIC_MESSAGE_TOOL,
         GET_HBAR_BALANCE_QUERY_TOOL,
         GET_ACCOUNT_QUERY_TOOL,
+        CREATE_ACCOUNT_TOOL,
         // etc.
       ], // use an empty array if you want to load all tools
       context: {
