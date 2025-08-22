@@ -33,6 +33,7 @@ import {
   transferERC20Parameters,
   transferERC721Parameters,
   mintERC721Parameters,
+  createERC721Parameters,
 } from '@/shared/parameter-schemas/evm.zod';
 
 export default class HederaParameterNormaliser {
@@ -60,14 +61,14 @@ export default class HederaParameterNormaliser {
     const supplyType =
       supplyTypeString === 'finite' ? TokenSupplyType.Finite : TokenSupplyType.Infinite;
     const decimals = params.decimals ?? 0;
-    const initialSupply = toBaseUnit(params.initialSupply ?? 0, decimals);
+    const initialSupply = toBaseUnit(params.initialSupply ?? 0, decimals).toNumber();
 
     let maxSupply: number | undefined = undefined;
     if (supplyTypeString === 'finite') {
       if (!params.maxSupply) {
         throw new Error('Must include max supply for finite supply type');
       }
-      maxSupply = toBaseUnit(params.maxSupply, decimals);
+      maxSupply = toBaseUnit(params.maxSupply, decimals).toNumber();
 
       if (initialSupply > maxSupply) {
         throw new Error(
@@ -184,7 +185,7 @@ export default class HederaParameterNormaliser {
         throw new Error(`Invalid recipient amount: ${recipient.amount}`);
       }
 
-      const amount = Long.fromString(toBaseUnit(amountRaw, tokenDecimals).toString());
+      const amount = Long.fromString(toBaseUnit(amountRaw, tokenDecimals).toNumber().toString());
 
       totalAmount = totalAmount.add(amount);
 
@@ -316,7 +317,7 @@ export default class HederaParameterNormaliser {
   ) {
     const decimals =
       (await mirrorNode.getTokenDetails(params.tokenId).then(r => Number(r.decimals))) ?? 0;
-    const baseAmount = toBaseUnit(params.amount, decimals);
+    const baseAmount = toBaseUnit(params.amount, decimals).toNumber();
     return {
       tokenId: params.tokenId,
       amount: baseAmount,
