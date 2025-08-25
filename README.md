@@ -57,6 +57,8 @@ Init and install with npm
 npm init -y
 ```
 
+> This command initializes a CommonJS project by default.
+
 ```bash
 npm install hedera-agent-kit @langchain/core langchain @hashgraph/sdk dotenv
 ```
@@ -387,11 +389,7 @@ npm run build
 ```
 3. Run and test the MCP server.
 The server accepts these command-line options:
-<<<<<<< HEAD
-  - `--ledger-id=testnet|mainnet` (defaults to testnet)
-=======
   - `--ledger-id=testnet|mainnet` (defaults to testnet/ mainnet)
->>>>>>> e25ce3d54e39a97fac41fc8dabf215ba5f589501
   - `--agent-mode`, and `--account-id` for additional configuration
 
 4. Run the server to verify it works:
@@ -421,7 +419,17 @@ node dist/index.js
 }
 ```
 
----
+### 7 - Option E: Try out the Hedera Agent Kit with ElizaOS
+
+ElizaOS is a powerful framework for building autonomous AI agents. The Hedera plugin for ElizaOS enables seamless integration with Hedera's blockchain services, allowing you to create sophisticated AI agents that can interact with the Hedera network.
+
+> ⚠️ **Development Status**: The ElizaOS plugin is currently in active development. Features and APIs may change as the plugin evolves.
+
+1. Clone the [Hedera ElizaOS Plugin Repository](https://github.com/hedera-dev/eliza-plugin-hedera/tree/feat/rework-v3)
+2. Install ElizaOS CLI
+3. Follow the [Hedera ElizaOS Plugin Docs](https://github.com/hedera-dev/eliza-plugin-hedera/tree/feat/rework-v3)
+
+
 ## About the Agent Kit
 
 ### Agent Execution Modes
@@ -453,7 +461,6 @@ Currently, the following plugins are available:
 * Get Topic Messages Query
 
 To request more functionality in the toolkit for other Hedera services, please [open an issue](https://github.com/hedera-dev/hedera-agent-kit/issues/new?template=toolkit_feature_request.yml&labels=feature-request).
-
 
 See a more thorough description and how to implement the plugins in [docs/HEDERAPLUGINS.md](docs/HEDERAPLUGINS.md)
 

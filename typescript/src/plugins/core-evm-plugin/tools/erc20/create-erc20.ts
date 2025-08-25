@@ -3,7 +3,7 @@ import { AgentMode, type Context } from '@/shared/configuration';
 import type { Tool } from '@/shared/tools';
 import { Client, TransactionRecordQuery } from '@hashgraph/sdk';
 import { ExecuteStrategyResult, handleTransaction } from '@/shared/strategies/tx-mode-strategy';
-import { createERC20Parameters } from '@/shared/parameter-schemas/hscs.zod';
+import { createERC20Parameters } from '@/shared/parameter-schemas/evm.zod';
 import HederaBuilder from '@/shared/hedera-utils/hedera-builder';
 import { PromptGenerator } from '@/shared/utils/prompt-generator';
 import HederaParameterNormaliser from '@/shared/hedera-utils/hedera-parameter-normaliser';
@@ -31,7 +31,7 @@ const getERC20Address = async (client: Client, executeStrategyResult: ExecuteStr
   const record = await new TransactionRecordQuery()
     .setTransactionId(executeStrategyResult.raw.transactionId)
     .execute(client);
-  return record.contractFunctionResult?.getAddress(0);
+  return '0x' + record.contractFunctionResult?.getAddress(0);
 };
 
 const createERC20 = async (

@@ -34,7 +34,7 @@ ${usageInstructions}
 };
 
 const postProcess = (response: RawTransactionResponse) => {
-  return `Token ${response.tokenId?.toString()} successfully airdropped with transaction id ${response.transactionId.toString()}`;
+  return `Token successfully airdropped with transaction id ${response.transactionId.toString()}`;
 };
 
 const airdropFungibleToken = async (

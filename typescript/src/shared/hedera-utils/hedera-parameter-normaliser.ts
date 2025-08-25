@@ -33,7 +33,7 @@ import {
   transferERC20Parameters,
   transferERC721Parameters,
   mintERC721Parameters,
-} from '@/shared/parameter-schemas/hscs.zod';
+} from '@/shared/parameter-schemas/evm.zod';
 
 export default class HederaParameterNormaliser {
   static async normaliseCreateFungibleTokenParams(
@@ -271,6 +271,32 @@ export default class HederaParameterNormaliser {
       params.tokenSymbol,
       params.decimals,
       params.initialSupply,
+    ]);
+
+    const functionParameters = ethers.getBytes(encodedData);
+
+    return {
+      ...params,
+      contractId: factoryContractId,
+      functionParameters,
+      gas: 3000000, //TODO: make this configurable
+    };
+  }
+
+  static normaliseCreateERC721Params(
+    params: z.infer<ReturnType<typeof createERC721Parameters>>,
+    factoryContractId: string,
+    factoryContractAbi: string[],
+    factoryContractFunctionName: string,
+  ) {
+    // Create interface for encoding
+    const iface = new ethers.Interface(factoryContractAbi);
+
+    // Encode the function call
+    const encodedData = iface.encodeFunctionData(factoryContractFunctionName, [
+      params.tokenName,
+      params.tokenSymbol,
+      params.baseURI,
     ]);
 
     const functionParameters = ethers.getBytes(encodedData);

@@ -4,7 +4,7 @@ import type { Tool } from '@/shared/tools';
 import HederaParameterNormaliser from '@/shared/hedera-utils/hedera-parameter-normaliser';
 import { Client } from '@hashgraph/sdk';
 import { handleTransaction } from '@/shared/strategies/tx-mode-strategy';
-import { transferERC20Parameters } from '@/shared/parameter-schemas/hscs.zod';
+import { transferERC20Parameters } from '@/shared/parameter-schemas/evm.zod';
 import HederaBuilder from '@/shared/hedera-utils/hedera-builder';
 import { PromptGenerator } from '@/shared/utils/prompt-generator';
 import { getMirrornodeService } from '@/shared/hedera-utils/mirrornode/hedera-mirrornode-utils';
